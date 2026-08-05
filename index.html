@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Conflict Explorer — 1989 to 2025</title>
+  
+  <!-- Typography: Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- D3.js and TopoJSON Client -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+  
+  <link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <h1 class="app-title">Global Conflict Explorer</h1>
+      <span class="app-subtitle">1989 – 2025</span>
+    </div>
+    
+    <div class="header-center">
+      <div class="search-container">
+        <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="country-search" placeholder="Search country or conflict party..." aria-label="Search country">
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="header-legend">
+        <span class="legend-title">Battle Deaths</span>
+        <div class="legend-scale">
+          <span class="legend-step" style="background:#AEB6C2" title="0 (Inactive)"></span>
+          <span class="legend-step" style="background:#FDECEC" title="10-100"></span>
+          <span class="legend-step" style="background:#F7B7B7" title="100-500"></span>
+          <span class="legend-step" style="background:#EF6A6A" title="500-1,000"></span>
+          <span class="legend-step" style="background:#C62828" title="1,000-5,000"></span>
+          <span class="legend-step" style="background:#5C0A0A" title="5,000+"></span>
+        </div>
+        <span class="legend-labels">
+          <span>0</span>
+          <span>5k+</span>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="app-layout">
+    
+    <!-- Map and Timeline Workspace (Left ~75%) -->
+    <section class="main-content">
+      
+      <!-- World Map Container -->
+      <div class="map-wrapper" id="map-wrapper">
+        <div id="map-container" class="map-container"></div>
+        
+        <!-- Map Tooltip -->
+        <div id="map-tooltip" class="map-tooltip hidden"></div>
+        
+        <!-- Zoom Controls -->
+        <div class="map-controls">
+          <button id="btn-zoom-in" title="Zoom In" aria-label="Zoom In">+</button>
+          <button id="btn-zoom-out" title="Zoom Out" aria-label="Zoom Out">−</button>
+          <button id="btn-zoom-reset" title="Reset View" aria-label="Reset View">Reset</button>
+        </div>
+      </div>
+
+      <!-- Year Timeline Section -->
+      <section class="timeline-section">
+        <div class="timeline-header">
+          <div class="timeline-controls-bar">
+            <button id="btn-play-pause" class="btn-control" aria-label="Play timeline">
+              <svg id="icon-play" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <polygon points="5,3 19,12 5,21"></polygon>
+              </svg>
+              <svg id="icon-pause" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" class="hidden">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+              </svg>
+              <span id="label-play-pause">Play</span>
+            </button>
+
+            <div class="speed-selector">
+              <button class="btn-speed active" data-speed="1">1x</button>
+              <button class="btn-speed" data-speed="2">2x</button>
+              <button class="btn-speed" data-speed="5">5x</button>
+            </div>
+          </div>
+
+          <div class="year-display-container">
+            <span class="year-label">YEAR</span>
+            <span id="current-year-display" class="year-number">1989</span>
+          </div>
+        </div>
+
+        <!-- Slider Container -->
+        <div class="slider-wrapper">
+          <input type="range" id="year-slider" min="1989" max="2025" step="1" value="1989" aria-label="Year slider">
+          <div class="slider-ticks">
+            <span>1989</span>
+            <span>1995</span>
+            <span>2000</span>
+            <span>2005</span>
+            <span>2010</span>
+            <span>2015</span>
+            <span>2020</span>
+            <span>2025</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Conflict Death Severity Filter Chips -->
+      <section class="severity-section">
+        <span class="section-label">Death Severity Filter</span>
+        <div class="severity-chips" id="severity-chips">
+          <button class="severity-chip active" data-severity="all">
+            <span class="chip-color" style="background:#5F6368"></span>
+            All Severities
+          </button>
+          <button class="severity-chip" data-severity="10-100">
+            <span class="chip-color" style="background:#FDECEC"></span>
+            10–100
+          </button>
+          <button class="severity-chip" data-severity="100-500">
+            <span class="chip-color" style="background:#F7B7B7"></span>
+            100–500
+          </button>
+          <button class="severity-chip" data-severity="500-1000">
+            <span class="chip-color" style="background:#EF6A6A"></span>
+            500–1,000
+          </button>
+          <button class="severity-chip" data-severity="1000-5000">
+            <span class="chip-color" style="background:#C62828"></span>
+            1,000–5,000
+          </button>
+          <button class="severity-chip" data-severity="5000+">
+            <span class="chip-color" style="background:#5C0A0A"></span>
+            5,000+
+          </button>
+        </div>
+      </section>
+
+    </section>
+
+    <!-- Right Sidebar (~25%) -->
+    <aside class="sidebar">
+      
+      <!-- KPI Card -->
+      <div class="card kpi-card">
+        <h2 class="card-title">Year Summary (<span id="kpi-year">1989</span>)</h2>
+        <div class="kpi-grid">
+          <div class="kpi-item">
+            <span class="kpi-value" id="kpi-total-deaths">0</span>
+            <span class="kpi-label">Battle Deaths</span>
+          </div>
+          <div class="kpi-item">
+            <span class="kpi-value" id="kpi-active-countries">0</span>
+            <span class="kpi-label">Active Countries</span>
+          </div>
+          <div class="kpi-item">
+            <span class="kpi-value" id="kpi-active-conflicts">0</span>
+            <span class="kpi-label">Active Conflicts</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Country Detail Card -->
+      <div class="card country-card" id="country-card">
+        <div class="card-header">
+          <h3 id="selected-country-name">Select a Country</h3>
+          <span id="selected-country-status" class="status-badge inactive">No Selection</span>
+        </div>
+        <div id="country-details-body" class="country-details-body">
+          <p class="placeholder-text">Click on any country on the map to inspect conflict history and belligerents.</p>
+        </div>
+      </div>
+
+      <!-- Filters Section -->
+      <div class="card filter-card">
+        <h3 class="card-title">Filters</h3>
+
+        <!-- Region Filter -->
+        <div class="filter-group">
+          <label for="filter-region">Region</label>
+          <select id="filter-region">
+            <option value="all">All Regions</option>
+            <option value="1">Europe</option>
+            <option value="2">Middle East</option>
+            <option value="3">Asia</option>
+            <option value="4">Africa</option>
+            <option value="5">Americas</option>
+          </select>
+        </div>
+
+        <!-- Conflict Type Filter -->
+        <div class="filter-group">
+          <label for="filter-type">Type of Conflict</label>
+          <select id="filter-type">
+            <option value="all">All Types</option>
+            <option value="1">Extrasystemic</option>
+            <option value="2">Interstate</option>
+            <option value="3">Internal</option>
+            <option value="4">Internationalized Internal</option>
+          </select>
+        </div>
+
+        <!-- Incompatibility Filter -->
+        <div class="filter-group">
+          <label for="filter-incomp">Incompatibility</label>
+          <select id="filter-incomp">
+            <option value="all">All Incompatibilities</option>
+            <option value="1">Territory</option>
+            <option value="2">Government</option>
+            <option value="3">Both</option>
+          </select>
+        </div>
+
+        <button id="btn-reset-filters" class="btn-secondary">Reset Filters</button>
+      </div>
+
+    </aside>
+  </main>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
