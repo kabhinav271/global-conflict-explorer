@@ -1,6 +1,6 @@
 /* ==========================================================================
    Global Conflict Explorer — Design System & Map Styles
-   Strict compliance with official World Atlas countries-110m.json styling.
+   Analytics Dashboard Layout: Single-Row Horizontal Toolbar & Sticky Workspace
    ========================================================================== */
 
 :root {
@@ -9,7 +9,7 @@
   --bg-panel: #FFFFFF;
   --bg-ocean: #EEF2F6;            /* Ocean: #EEF2F6 */
   --bg-country-inactive: #B8C1CC; /* Inactive Countries: #B8C1CC */
-  --bg-hover: #9CA7B5;
+  --bg-hover: #F1F5F9;
 
   --text-primary: #202124;
   --text-secondary: #5F6368;
@@ -27,12 +27,13 @@
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --radius-sm: 4px;
   --radius-md: 8px;
+  --radius-lg: 12px;
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
   --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05);
 
   --header-height: 64px;
-  --sidebar-width: 320px;
+  --sidebar-width: 330px;
 }
 
 /* Reset & Base */
@@ -63,6 +64,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: var(--shadow-subtle);
 }
 
 .header-left {
@@ -98,26 +100,28 @@ body {
 
 .search-icon {
   position: absolute;
-  left: 12px;
+  left: 14px;
   color: var(--text-secondary);
   pointer-events: none;
 }
 
 .search-container input {
   width: 100%;
-  padding: 8px 12px 8px 36px;
+  height: 42px;
+  padding: 0 14px 0 38px;
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-lg);
   background-color: var(--bg-main);
   font-family: inherit;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-primary);
   outline: none;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .search-container input:focus {
-  border-color: #A0A0A0;
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
   background-color: #FFFFFF;
 }
 
@@ -163,26 +167,125 @@ body {
 .app-layout {
   display: grid;
   grid-template-columns: 1fr var(--sidebar-width);
-  gap: 24px;
-  padding: 24px;
-  max-width: 1600px;
+  gap: 20px;
+  padding: 16px 24px;
+  max-width: 1680px;
   margin: 0 auto;
-  min-height: calc(100vh - var(--header-height));
+  align-items: start;
 }
 
 .main-content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
+  position: sticky;
+  top: calc(var(--header-height) + 16px);
 }
 
-/* World Map Container */
+/* Single-Row Analytics Filter Toolbar (Strict Design System Specs) */
+.filter-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: nowrap;
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 8px 16px;
+  box-shadow: var(--shadow-subtle);
+}
+
+.filter-toolbar select,
+select#filter-region,
+select#filter-type,
+select#filter-incomp {
+  width: 210px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #E5E7EB;
+  background-color: #FFFFFF;
+  padding: 0 40px 0 14px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  outline: none;
+  cursor: pointer;
+
+  /* Remove native browser appearance */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* Clean base64 encoded custom chevron icon */
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM1RjYzNjgiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJtNiA5IDYgNiA2LTYiLz48L3N2Zz4=');
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px 16px;
+
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* Hover state */
+.filter-toolbar select:hover,
+select#filter-region:hover,
+select#filter-type:hover,
+select#filter-incomp:hover {
+  border-color: #CBD5E1;
+}
+
+/* Focus state */
+.filter-toolbar select:focus,
+select#filter-region:focus,
+select#filter-type:focus,
+select#filter-incomp:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.btn-secondary,
+.btn-reset,
+button#btn-reset-filters {
+  height: 36px;
+  padding: 0 18px;
+  background-color: #4f81ee;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  color: #f4f6f8;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-secondary:hover,
+.btn-reset:hover,
+button#btn-reset-filters:hover {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  border-color: #CBD5E1;
+}
+
+.btn-secondary:focus,
+.btn-reset:focus,
+button#btn-reset-filters:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  outline: none;
+}
+
+/* World Map Container (Large Visual Focus) */
 .map-wrapper {
   position: relative;
   background-color: var(--bg-ocean); /* Ocean: #EEF2F6 */
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  height: 520px;
+  height: 560px;
   overflow: hidden;
 }
 
@@ -301,14 +404,15 @@ body {
   background-color: var(--bg-panel);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 16px 20px;
+  padding: 14px 20px;
+  box-shadow: var(--shadow-subtle);
 }
 
 .timeline-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .timeline-controls-bar {
@@ -375,7 +479,7 @@ body {
 }
 
 .year-number {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
   color: var(--text-primary);
   font-variant-numeric: tabular-nums;
@@ -384,7 +488,7 @@ body {
 .slider-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 input[type="range"]#year-slider {
@@ -427,7 +531,8 @@ input[type="range"]#year-slider::-webkit-slider-thumb:hover {
   background-color: var(--bg-panel);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 12px 20px;
+  padding: 10px 20px;
+  box-shadow: var(--shadow-subtle);
 }
 
 .section-label {
@@ -450,7 +555,7 @@ input[type="range"]#year-slider::-webkit-slider-thumb:hover {
   background-color: var(--bg-main);
   border: 1px solid var(--border-color);
   border-radius: 16px;
-  padding: 6px 12px;
+  padding: 5px 12px;
   font-family: inherit;
   font-size: 12px;
   color: var(--text-secondary);
@@ -481,20 +586,24 @@ input[type="range"]#year-slider::-webkit-slider-thumb:hover {
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
+  position: sticky;
+  top: calc(var(--header-height) + 16px);
+  max-height: calc(100vh - var(--header-height) - 32px);
 }
 
 .card {
   background-color: var(--bg-panel);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 20px;
+  padding: 18px;
+  box-shadow: var(--shadow-subtle);
 }
 
 .card-title {
   font-size: 14px;
   font-weight: 600;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   color: var(--text-primary);
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 8px;
@@ -525,12 +634,24 @@ input[type="range"]#year-slider::-webkit-slider-thumb:hover {
   margin-top: 2px;
 }
 
-/* Country Card */
+/* Country Card (Scrollable Conflict Details Body) */
+.country-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  max-height: calc(100vh - var(--header-height) - 200px);
+  overflow: hidden;
+}
+
 .country-card .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .country-card h3 {
@@ -558,6 +679,28 @@ input[type="range"]#year-slider::-webkit-slider-thumb:hover {
 .country-details-body {
   font-size: 13px;
   color: var(--text-secondary);
+  overflow-y: auto;
+  padding-right: 4px;
+  flex: 1;
+}
+
+/* Custom Scrollbar for Country Details */
+.country-details-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.country-details-body::-webkit-scrollbar-track {
+  background: var(--bg-main);
+  border-radius: 3px;
+}
+
+.country-details-body::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 3px;
+}
+
+.country-details-body::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
 }
 
 .placeholder-text {
@@ -582,56 +725,41 @@ input[type="range"]#year-slider::-webkit-slider-thumb:hover {
   color: var(--text-primary);
 }
 
-/* Filter Card */
-.filter-card {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.filter-group label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-
-.filter-group select {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  background-color: var(--bg-main);
-  font-family: inherit;
-  font-size: 13px;
-  color: var(--text-primary);
-  outline: none;
-}
-
-.btn-secondary {
-  background-color: transparent;
-  border: 1px solid var(--border-color);
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  cursor: pointer;
-  margin-top: 4px;
-  transition: background-color var(--transition-fast);
-}
-
-.btn-secondary:hover {
-  background-color: var(--bg-main);
-  color: var(--text-primary);
-}
-
 .hidden {
   display: none !important;
+}
+
+/* Responsive Rules */
+@media (max-width: 1200px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .main-content, .sidebar {
+    position: static;
+    max-height: none;
+  }
+
+  .country-card {
+    max-height: 400px;
+  }
+
+  .filter-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .filter-toolbar select {
+    width: 48%;
+  }
+}
+
+@media (max-width: 640px) {
+  .filter-toolbar select {
+    width: 100%;
+  }
+
+  .severity-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

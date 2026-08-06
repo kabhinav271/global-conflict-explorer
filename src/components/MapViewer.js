@@ -152,13 +152,13 @@ export class MapViewer {
     if (defs.select('#arrow-glow').empty()) {
       const filter = defs.append('filter')
         .attr('id', 'arrow-glow')
-        .attr('x', '-20%')
-        .attr('y', '-20%')
-        .attr('width', '140%')
-        .attr('height', '140%');
+        .attr('x', '-10%')
+        .attr('y', '-10%')
+        .attr('width', '110%')
+        .attr('height', '110%');
 
       filter.append('feGaussianBlur')
-        .attr('stdDeviation', '2.5')
+        .attr('stdDeviation', '1')
         .attr('result', 'blur');
 
       const feMerge = filter.append('feMerge');
