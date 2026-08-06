@@ -1,8 +1,7 @@
 /**
  * MapViewer Component
- * Diagnostic mode enabled for Step 1-6 inspection.
  * Rebuilt using official World Atlas countries-110m.json map layer.
- * Dynamic Interstate Conflict Arrows implementation.
+ * Dynamic Interstate Conflict Arrows: Frozen arrowhead angle at destination (no post-flight rotation/tilting).
  */
 
 import { getSeverityColor, normalizeCountryId } from '../utils/dataLoader.js';
@@ -36,6 +35,9 @@ export class MapViewer {
       .attr('height', '100%')
       .attr('viewBox', `0 0 ${width} ${height}`)
       .attr('preserveAspectRatio', 'xMidYMid meet');
+
+    // Create SVG defs section for soft glow filter
+    this.createArrowDefs();
 
     // 1. Convert TopoJSON to GeoJSON FeatureCollection
     const countries = topojson.feature(this.topoData, this.topoData.objects.countries).features;
@@ -137,6 +139,105 @@ export class MapViewer {
     });
   }
 
+  /**
+   * Creates SVG defs (Soft Glow Filter)
+   */
+  createArrowDefs() {
+    let defs = this.svg.select('defs');
+    if (defs.empty()) {
+      defs = this.svg.append('defs');
+    }
+
+    // Subtle Glow Filter
+    if (defs.select('#arrow-glow').empty()) {
+      const filter = defs.append('filter')
+        .attr('id', 'arrow-glow')
+        .attr('x', '-20%')
+        .attr('y', '-20%')
+        .attr('width', '140%')
+        .attr('height', '140%');
+
+      filter.append('feGaussianBlur')
+        .attr('stdDeviation', '2.5')
+        .attr('result', 'blur');
+
+      const feMerge = filter.append('feMerge');
+      feMerge.append('feMergeNode').attr('in', 'blur');
+      feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+    }
+  }
+
+  /**
+   * Helper: Calculates variable arrow stroke thickness based on Battle Deaths
+   */
+  getArrowWidth(totalBattleDeaths) {
+    const deaths = totalBattleDeaths || 0;
+    if (deaths < 100) return 2;
+    if (deaths < 500) return 3;
+    if (deaths < 1000) return 4;
+    if (deaths < 5000) return 6;
+    return 8;
+  }
+
+  /**
+   * Helper: Animates path drawing with moving arrowhead.
+   * Freezes rotation at destination using last valid angle.
+   */
+  animateArrow(pathElement, strokeWidth = 2, duration = 600) {
+    const node = pathElement.node();
+    const totalLength = node.getTotalLength();
+    if (!totalLength || totalLength <= 0) return;
+
+    // Create moving arrowhead element inside arcLayer
+    const headScale = Math.max(0.7, strokeWidth / 3);
+    const flyingHead = this.arcLayer.append("polygon")
+      .attr("class", "moving-arrowhead")
+      .attr("points", "-6,-5 6,0 -6,5")
+      .attr("fill", "#7DD3FC")
+      .attr("opacity", 0.95)
+      .style("filter", "url(#arrow-glow)");
+
+    // Set initial dasharray and offset
+    pathElement
+      .attr("stroke-dasharray", `${totalLength} ${totalLength}`)
+      .attr("stroke-dashoffset", totalLength);
+
+    let lastValidAngle = 0;
+
+    // D3 transition moving the arrowhead along the curve
+    pathElement
+      .transition()
+      .duration(duration)
+      .ease(d3.easeCubicOut)
+      .attrTween("stroke-dashoffset", () => {
+        return (t) => {
+          const currentLength = t * totalLength;
+          const offset = totalLength - currentLength;
+
+          // Clamp sampling length to prevent sampling beyond totalLength
+          const safeLen = Math.min(currentLength, totalLength);
+
+          if (safeLen < totalLength - 0.5) {
+            const p0 = node.getPointAtLength(safeLen);
+            const p1 = node.getPointAtLength(Math.min(safeLen + 1, totalLength));
+            lastValidAngle = Math.atan2(p1.y - p0.y, p1.x - p0.x) * (180 / Math.PI);
+            flyingHead.attr("transform", `translate(${p0.x}, ${p0.y}) rotate(${lastValidAngle}) scale(${headScale})`);
+          } else {
+            // At destination: Freeze position at destination and preserve lastValidAngle
+            const pEnd = node.getPointAtLength(totalLength);
+            flyingHead.attr("transform", `translate(${pEnd.x}, ${pEnd.y}) rotate(${lastValidAngle}) scale(${headScale})`);
+          }
+
+          return offset;
+        };
+      })
+      .on("end", () => {
+        // Freeze final position at exact totalLength with lastValidAngle
+        const pEnd = node.getPointAtLength(totalLength);
+        flyingHead.attr("transform", `translate(${pEnd.x}, ${pEnd.y}) rotate(${lastValidAngle}) scale(${headScale})`);
+      });
+  }
+
   getDeathsForFeature(d) {
     if (!d || d.id === undefined || d.id === null) return 0;
     const normId = normalizeCountryId(d.id);
@@ -147,60 +248,54 @@ export class MapViewer {
     return this.countryCenters.get(normalizeCountryId(countryID));
   }
 
-  drawTestArrow() {
-    this.arcLayer.selectAll("*").remove();
-
-    const start = this.getCountryCenter("356"); // India
-    const end = this.getCountryCenter("586");   // Pakistan
-
-    if (!start || !end) return;
-
-    const midX = (start.x + end.x) / 2;
-    const midY = (start.y + end.y) / 2 - 40;
-
-    const path = `
-        M ${start.x},${start.y}
-        Q ${midX},${midY}
-          ${end.x},${end.y}
-    `;
-
-    this.arcLayer
-        .append("path")
-        .attr("d", path)
-        .attr("fill", "none")
-        .attr("stroke", "#4FC3F7")
-        .attr("stroke-width", 3)
-        .attr("stroke-linecap", "round");
-  }
-
   /**
-   * Renders dynamic interstate conflict arrows for selected country and year
+   * Renders dynamic interstate conflict arrows for selected country and year.
    */
   drawInterstateArrows(selectedCountryId, currentYear, records) {
-    // Remove all previous arrows before drawing new ones
+    // Always clear all previous arrows and head elements before evaluating
     this.arcLayer.selectAll("*").remove();
 
-    if (!selectedCountryId || !records || !Array.isArray(records)) return;
+    if (!selectedCountryId || !records || !Array.isArray(records)) {
+      console.log(`Selected Country: ${selectedCountryId || 'None'}`);
+      console.log(`Selected Year: ${currentYear}`);
+      console.log(`Number of interstate conflicts found after filtering: 0`);
+      return;
+    }
 
     const normSelectedId = normalizeCountryId(selectedCountryId);
+    const targetYear = Number(currentYear);
+    const countryName = this.countryIdToName.get(normSelectedId) || normSelectedId;
 
-    // Filter for selected year, Interstate conflict (Type of Conflict = 2), and where Side A / Side B matches selected country
+    // Strict 3-Way Filter
     const interstateConflicts = records.filter(record => {
-      const isYearMatch = record.year === currentYear;
+      const isYearMatch = Number(record.year) === targetYear;
       const isInterstate = String(record.typeOfConflict) === '2';
       const isCountryMatch = record.matchedCountryIds.some(cid => normalizeCountryId(cid) === normSelectedId);
       return isYearMatch && isInterstate && isCountryMatch;
     });
 
-    console.log(`[Interstate Arrows] Found ${interstateConflicts.length} interstate conflicts for country ${normSelectedId} in year ${currentYear}`);
+    console.log(`Selected Country: ${countryName} (${normSelectedId})`);
+    console.log(`Selected Year: ${targetYear}`);
+    console.log(`Number of interstate conflicts found after filtering: ${interstateConflicts.length}`);
+
+    if (interstateConflicts.length === 0) {
+      return;
+    }
 
     const drawnPairs = new Set();
 
     interstateConflicts.forEach(record => {
-      // Find opponent country IDs
+      console.log(`Year: ${record.year}`);
+      console.log(`Type of Conflict: ${record.typeOfConflict}`);
+      console.log(`Side A: ${record.sideA}`);
+      console.log(`Side B: ${record.sideB}`);
+
       const opponentIds = record.matchedCountryIds
         .map(cid => normalizeCountryId(cid))
         .filter(cid => cid !== normSelectedId);
+
+      const deaths = record.bdBest || 0;
+      const strokeWidth = this.getArrowWidth(deaths);
 
       opponentIds.forEach(targetId => {
         const pairKey = [normSelectedId, targetId].sort().join('-');
@@ -222,32 +317,25 @@ export class MapViewer {
             ${end.x},${end.y}
         `;
 
-        // Render path inside arcLayer
+        // Render arc path inside arcLayer with variable thickness & soft glow
         const arcPath = this.arcLayer.append("path")
           .attr("d", pathString)
           .attr("fill", "none")
           .attr("stroke", "#7DD3FC")
-          .attr("stroke-width", 2.5)
+          .attr("stroke-width", strokeWidth)
           .attr("stroke-linecap", "round")
-          .attr("opacity", 0.8);
+          .attr("stroke-linejoin", "round")
+          .attr("opacity", 0.85)
+          .style("filter", "url(#arrow-glow)");
 
-        // Animated draw effect (stroke-dasharray & stroke-dashoffset)
-        const totalLength = arcPath.node().getTotalLength();
-        if (totalLength && totalLength > 0) {
-          arcPath
-            .attr("stroke-dasharray", `${totalLength} ${totalLength}`)
-            .attr("stroke-dashoffset", totalLength)
-            .transition()
-            .duration(800)
-            .ease(d3.easeCubicOut)
-            .attr("stroke-dashoffset", 0);
-        }
+        // Animate moving arrowhead along curve
+        this.animateArrow(arcPath, strokeWidth, 600);
       });
     });
   }
 
   /**
-   * Diagnostic updateMap execution for Steps 1-6
+   * Map update execution
    */
   updateMap(countryDeathsMap, selectedSeverityFilter = 'all') {
     this.currentCountryDeaths = countryDeathsMap || new Map();

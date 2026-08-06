@@ -2,7 +2,7 @@
  * Application Main Controller
  * Initializes DataLoader, MapViewer, TimelineControls, and Sidebar.
  * Rebuilt using official World Atlas countries-110m.json map layer.
- * Integrated with dynamic Interstate Conflict Arrows.
+ * Integrated with dynamic Interstate Conflict Arrows (Strict Year Filtering).
  */
 
 import { loadApplicationData, normalizeCountryId } from './utils/dataLoader.js';
@@ -104,7 +104,7 @@ class AppController {
     const conflicts = this.getCountryConflictsForYear(this.selectedCountryId, this.currentYear);
     this.sidebar.updateCountryDetails(countryName, deaths, conflicts);
 
-    // Draw dynamic interstate conflict arrows for selected country & year
+    // Draw dynamic interstate conflict arrows for selected country & current year
     if (this.appData && this.appData.records) {
       this.mapViewer.drawInterstateArrows(this.selectedCountryId, this.currentYear, this.appData.records);
     }
@@ -171,8 +171,8 @@ class AppController {
     // 3. Update Map
     this.mapViewer.updateMap(countryDeathsMap, this.currentSeverity);
 
-    // 4. Draw dynamic interstate conflict arrows if country is selected
-    if (this.selectedCountryId && this.appData.records) {
+    // 4. Update Interstate Arrows using ONLY current year data
+    if (this.appData && this.appData.records) {
       this.mapViewer.drawInterstateArrows(this.selectedCountryId, this.currentYear, this.appData.records);
     }
 
