@@ -172,11 +172,11 @@ export class MapViewer {
    */
   getArrowWidth(totalBattleDeaths) {
     const deaths = totalBattleDeaths || 0;
-    if (deaths < 100) return 2;
-    if (deaths < 500) return 3;
-    if (deaths < 1000) return 4;
-    if (deaths < 5000) return 6;
-    return 8;
+    if (deaths < 100) return 1;
+    if (deaths < 500) return 2;
+    if (deaths < 1000) return 2;
+    if (deaths < 5000) return 2;
+    return 2;
   }
 
   /**
@@ -193,7 +193,7 @@ export class MapViewer {
     const flyingHead = this.arcLayer.append("polygon")
       .attr("class", "moving-arrowhead")
       .attr("points", "-6,-5 6,0 -6,5")
-      .attr("fill", "#7DD3FC")
+      .attr("fill", "#1B81B1")
       .attr("opacity", 0.95)
       .style("filter", "url(#arrow-glow)");
 
@@ -321,7 +321,7 @@ export class MapViewer {
         const arcPath = this.arcLayer.append("path")
           .attr("d", pathString)
           .attr("fill", "none")
-          .attr("stroke", "#7DD3FC")
+          .attr("stroke", "#1B81B1")
           .attr("stroke-width", strokeWidth)
           .attr("stroke-linecap", "round")
           .attr("stroke-linejoin", "round")
