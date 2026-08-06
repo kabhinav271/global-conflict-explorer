@@ -2,6 +2,7 @@
  * Application Main Controller
  * Initializes DataLoader, MapViewer, TimelineControls, and Sidebar.
  * Rebuilt using official World Atlas countries-110m.json map layer.
+ * Integrated with dynamic Interstate Conflict Arrows.
  */
 
 import { loadApplicationData, normalizeCountryId } from './utils/dataLoader.js';
@@ -102,6 +103,11 @@ class AppController {
 
     const conflicts = this.getCountryConflictsForYear(this.selectedCountryId, this.currentYear);
     this.sidebar.updateCountryDetails(countryName, deaths, conflicts);
+
+    // Draw dynamic interstate conflict arrows for selected country & year
+    if (this.appData && this.appData.records) {
+      this.mapViewer.drawInterstateArrows(this.selectedCountryId, this.currentYear, this.appData.records);
+    }
   }
 
   getCountryDeathsForYear(countryId, year) {
@@ -156,7 +162,6 @@ class AppController {
     const activeCountriesCount = countryDeathsMap.size;
     const activeConflictsCount = activeConflictsSet.size;
 
-    // Step 1 Debug Log: Country Name | Country ID | Total Battle Deaths
     console.log(`=== Step 1: Battle Deaths Totals for Year ${this.currentYear} ===`);
     countryDeathsMap.forEach((deaths, cid) => {
       const cName = this.appData.countryIdToName.get(cid) || 'Country';
@@ -166,7 +171,12 @@ class AppController {
     // 3. Update Map
     this.mapViewer.updateMap(countryDeathsMap, this.currentSeverity);
 
-    // 4. Update Sidebar KPIs
+    // 4. Draw dynamic interstate conflict arrows if country is selected
+    if (this.selectedCountryId && this.appData.records) {
+      this.mapViewer.drawInterstateArrows(this.selectedCountryId, this.currentYear, this.appData.records);
+    }
+
+    // 5. Update Sidebar KPIs
     this.sidebar.updateKPI(
       this.currentYear,
       totalDeathsInYear,
@@ -174,7 +184,7 @@ class AppController {
       activeConflictsCount
     );
 
-    // 5. Update Selected Country Card if active
+    // 6. Update Selected Country Card if active
     if (this.selectedCountryId) {
       const deaths = countryDeathsMap.get(this.selectedCountryId) || 0;
       const conflicts = this.getCountryConflictsForYear(this.selectedCountryId, this.currentYear);

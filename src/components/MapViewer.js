@@ -1,6 +1,8 @@
 /**
  * MapViewer Component
  * Diagnostic mode enabled for Step 1-6 inspection.
+ * Rebuilt using official World Atlas countries-110m.json map layer.
+ * Dynamic Interstate Conflict Arrows implementation.
  */
 
 import { getSeverityColor, normalizeCountryId } from '../utils/dataLoader.js';
@@ -50,8 +52,32 @@ export class MapViewer {
 
     this.pathGenerator = d3.geoPath(this.projection);
 
+    // Store center point of every country
+    this.countryCenters = new Map();
+
+    countries.forEach(feature => {
+      const id = normalizeCountryId(feature.id);
+      const centroid = this.pathGenerator.centroid(feature);
+      if (centroid && !isNaN(centroid[0]) && !isNaN(centroid[1])) {
+        this.countryCenters.set(id, {
+          x: centroid[0],
+          y: centroid[1]
+        });
+      }
+    });
+
     // Group for zoomable elements
     this.g = this.svg.append('g').attr('class', 'map-g');
+
+    // Layer for countries
+    this.countryLayer = this.g
+      .append("g")
+      .attr("class", "country-layer");
+
+    // Layer for interstate arrows
+    this.arcLayer = this.g
+      .append("g")
+      .attr("class", "arc-layer");
 
     // Zoom behavior
     this.zoom = d3.zoom()
@@ -63,7 +89,7 @@ export class MapViewer {
     this.svg.call(this.zoom);
 
     // 3. Render every country as an independent SVG path
-    this.paths = this.g.selectAll('.country-path')
+    this.paths = this.countryLayer.selectAll('.country-path')
       .data(countries)
       .join('path')
       .attr('class', 'country-path')
@@ -117,6 +143,109 @@ export class MapViewer {
     return this.currentCountryDeaths.get(normId) || 0;
   }
 
+  getCountryCenter(countryID) {
+    return this.countryCenters.get(normalizeCountryId(countryID));
+  }
+
+  drawTestArrow() {
+    this.arcLayer.selectAll("*").remove();
+
+    const start = this.getCountryCenter("356"); // India
+    const end = this.getCountryCenter("586");   // Pakistan
+
+    if (!start || !end) return;
+
+    const midX = (start.x + end.x) / 2;
+    const midY = (start.y + end.y) / 2 - 40;
+
+    const path = `
+        M ${start.x},${start.y}
+        Q ${midX},${midY}
+          ${end.x},${end.y}
+    `;
+
+    this.arcLayer
+        .append("path")
+        .attr("d", path)
+        .attr("fill", "none")
+        .attr("stroke", "#4FC3F7")
+        .attr("stroke-width", 3)
+        .attr("stroke-linecap", "round");
+  }
+
+  /**
+   * Renders dynamic interstate conflict arrows for selected country and year
+   */
+  drawInterstateArrows(selectedCountryId, currentYear, records) {
+    // Remove all previous arrows before drawing new ones
+    this.arcLayer.selectAll("*").remove();
+
+    if (!selectedCountryId || !records || !Array.isArray(records)) return;
+
+    const normSelectedId = normalizeCountryId(selectedCountryId);
+
+    // Filter for selected year, Interstate conflict (Type of Conflict = 2), and where Side A / Side B matches selected country
+    const interstateConflicts = records.filter(record => {
+      const isYearMatch = record.year === currentYear;
+      const isInterstate = String(record.typeOfConflict) === '2';
+      const isCountryMatch = record.matchedCountryIds.some(cid => normalizeCountryId(cid) === normSelectedId);
+      return isYearMatch && isInterstate && isCountryMatch;
+    });
+
+    console.log(`[Interstate Arrows] Found ${interstateConflicts.length} interstate conflicts for country ${normSelectedId} in year ${currentYear}`);
+
+    const drawnPairs = new Set();
+
+    interstateConflicts.forEach(record => {
+      // Find opponent country IDs
+      const opponentIds = record.matchedCountryIds
+        .map(cid => normalizeCountryId(cid))
+        .filter(cid => cid !== normSelectedId);
+
+      opponentIds.forEach(targetId => {
+        const pairKey = [normSelectedId, targetId].sort().join('-');
+        if (drawnPairs.has(pairKey)) return;
+        drawnPairs.add(pairKey);
+
+        const start = this.getCountryCenter(normSelectedId);
+        const end = this.getCountryCenter(targetId);
+
+        if (!start || !end) return;
+
+        // Quadratic Bézier curve control point
+        const midX = (start.x + end.x) / 2;
+        const midY = (start.y + end.y) / 2 - 35;
+
+        const pathString = `
+          M ${start.x},${start.y}
+          Q ${midX},${midY}
+            ${end.x},${end.y}
+        `;
+
+        // Render path inside arcLayer
+        const arcPath = this.arcLayer.append("path")
+          .attr("d", pathString)
+          .attr("fill", "none")
+          .attr("stroke", "#7DD3FC")
+          .attr("stroke-width", 2.5)
+          .attr("stroke-linecap", "round")
+          .attr("opacity", 0.8);
+
+        // Animated draw effect (stroke-dasharray & stroke-dashoffset)
+        const totalLength = arcPath.node().getTotalLength();
+        if (totalLength && totalLength > 0) {
+          arcPath
+            .attr("stroke-dasharray", `${totalLength} ${totalLength}`)
+            .attr("stroke-dashoffset", totalLength)
+            .transition()
+            .duration(800)
+            .ease(d3.easeCubicOut)
+            .attr("stroke-dashoffset", 0);
+        }
+      });
+    });
+  }
+
   /**
    * Diagnostic updateMap execution for Steps 1-6
    */
@@ -126,15 +255,7 @@ export class MapViewer {
 
     if (!this.paths) return;
 
-    // Step 1: SVG Elements Count
-    const svgCount = document.querySelectorAll("svg").length;
-    console.log(`[Diagnostic Step 1] document.querySelectorAll("svg").length: ${svgCount}`);
-
-    // Step 2: Country Paths Count
-    const pathCount = document.querySelectorAll(".country-path").length;
-    console.log(`[Diagnostic Step 2] document.querySelectorAll(".country-path").length: ${pathCount}`);
-
-    // Step 3: Transition fill color
+    // Transition fill color smoothly using both style('fill', ...) and attr('fill', ...)
     this.paths.transition()
       .duration(300)
       .ease(d3.easeCubicOut)
@@ -156,25 +277,6 @@ export class MapViewer {
         }
         return getSeverityColor(deaths);
       });
-
-    // Step 3 Inspection for India (data-id="356")
-    const india = document.querySelector('.country-path[data-id="356"]');
-    if (india) {
-      console.log(`[Diagnostic Step 3 Immediate] India (356) getAttribute("fill"):`, india.getAttribute("fill"));
-      console.log(`[Diagnostic Step 3 Immediate] India (356) getComputedStyle().fill:`, getComputedStyle(india).fill);
-
-      // Step 6: Verify visible SVG containment
-      const containerSvg = this.container.querySelector('svg');
-      console.log(`[Diagnostic Step 6] India element inside container SVG?:`, containerSvg.contains(india));
-    }
-
-    // Step 4 Inspection after 500ms
-    setTimeout(() => {
-      if (india) {
-        console.log(`[Diagnostic Step 4 at +500ms] India (356) getAttribute("fill"):`, india.getAttribute("fill"));
-        console.log(`[Diagnostic Step 4 at +500ms] India (356) getComputedStyle().fill:`, getComputedStyle(india).fill);
-      }
-    }, 500);
 
     // Toggle active and selected CSS states
     this.paths
