@@ -90,6 +90,26 @@ export class Sidebar {
         this.selectedCountryStatus.textContent = 'Active Conflict';
         this.selectedCountryStatus.className = 'status-badge active';
       }
+
+      // Calculate Conflict Breakdown by category
+      let interstateDeaths = 0;
+      let internalDeaths = 0;
+      let extrasystemicDeaths = 0;
+
+      conflictList.forEach(c => {
+        const typeStr = String(c.typeOfConflict);
+        const bd = c.bdBest || 0;
+
+        if (typeStr === '2') {
+          interstateDeaths += bd;
+        } else if (typeStr === '3' || typeStr === '4') {
+          internalDeaths += bd;
+        } else if (typeStr === '1') {
+          extrasystemicDeaths += bd;
+        } else {
+          internalDeaths += bd;
+        }
+      });
       
       let html = `
         <div class="detail-row">
@@ -102,13 +122,42 @@ export class Sidebar {
         </div>
       `;
 
+      // Render Conflict Breakdown section if any category has > 0 deaths
+      const hasBreakdown = (interstateDeaths > 0 || internalDeaths > 0 || extrasystemicDeaths > 0);
+      if (hasBreakdown) {
+        html += `
+          <div class="breakdown-section" style="margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-color);">
+            <div style="font-weight: 600; font-size: 12px; color: var(--text-primary); margin-bottom: 6px;">Conflict Breakdown</div>
+            ${internalDeaths > 0 ? `
+              <div class="detail-row">
+                <span class="label">Internal</span>
+                <span class="value">${internalDeaths.toLocaleString()}</span>
+              </div>
+            ` : ''}
+            ${interstateDeaths > 0 ? `
+              <div class="detail-row">
+                <span class="label">Interstate</span>
+                <span class="value">${interstateDeaths.toLocaleString()}</span>
+              </div>
+            ` : ''}
+            ${extrasystemicDeaths > 0 ? `
+              <div class="detail-row">
+                <span class="label">Extrasystemic</span>
+                <span class="value">${extrasystemicDeaths.toLocaleString()}</span>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+
+      // Belligerents & Parties list
       if (conflictList.length > 0) {
-        html += `<div style="margin-top:12px; font-weight:600; font-size:12px; color:var(--text-primary);">Belligerents & Parties:</div>`;
+        html += `<div style="margin-top: 14px; font-weight: 600; font-size: 12px; color: var(--text-primary); border-top: 1px solid var(--border-color); padding-top: 8px;">Belligerents & Parties:</div>`;
         conflictList.forEach(c => {
           html += `
-            <div style="background:var(--bg-main); padding:8px; border-radius:4px; margin-top:6px; border:1px solid var(--border-color);">
-              <div style="font-weight:600; color:#C62828;">${c.sideA} vs ${c.sideB}</div>
-              <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
+            <div style="background: var(--bg-main); padding: 8px; border-radius: 4px; margin-top: 6px; border: 1px solid var(--border-color);">
+              <div style="font-weight: 600; color: #C62828;">${c.sideA} vs ${c.sideB}</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">
                 Territory: ${c.territoryName || 'N/A'} | Deaths: ${c.bdBest.toLocaleString()}
               </div>
             </div>
