@@ -1,7 +1,7 @@
 /**
  * Sidebar Component
  * Manages KPI summary cards, Country details panel, Severity chips,
- * and Filter controls.
+ * and Filter controls. Integrated with Conflict Breakdown section.
  */
 
 export class Sidebar {
@@ -90,8 +90,8 @@ export class Sidebar {
         this.selectedCountryStatus.textContent = 'Active Conflict';
         this.selectedCountryStatus.className = 'status-badge active';
       }
-
-      // Calculate Conflict Breakdown by category
+      
+      // Compute breakdown by conflict type
       let interstateDeaths = 0;
       let internalDeaths = 0;
       let extrasystemicDeaths = 0;
@@ -99,18 +99,15 @@ export class Sidebar {
       conflictList.forEach(c => {
         const typeStr = String(c.typeOfConflict);
         const bd = c.bdBest || 0;
-
         if (typeStr === '2') {
           interstateDeaths += bd;
         } else if (typeStr === '3' || typeStr === '4') {
           internalDeaths += bd;
         } else if (typeStr === '1') {
           extrasystemicDeaths += bd;
-        } else {
-          internalDeaths += bd;
         }
       });
-      
+
       let html = `
         <div class="detail-row">
           <span class="label">Battle Deaths (${this.kpiYear?.textContent || ''}):</span>
@@ -122,37 +119,47 @@ export class Sidebar {
         </div>
       `;
 
-      // Render Conflict Breakdown section if any category has > 0 deaths
+      // Build Conflict Breakdown if any category has deaths > 0
       const hasBreakdown = (interstateDeaths > 0 || internalDeaths > 0 || extrasystemicDeaths > 0);
+
       if (hasBreakdown) {
         html += `
-          <div class="breakdown-section" style="margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-color);">
-            <div style="font-weight: 600; font-size: 12px; color: var(--text-primary); margin-bottom: 6px;">Conflict Breakdown</div>
-            ${internalDeaths > 0 ? `
-              <div class="detail-row">
-                <span class="label">Internal</span>
-                <span class="value">${internalDeaths.toLocaleString()}</span>
-              </div>
-            ` : ''}
-            ${interstateDeaths > 0 ? `
-              <div class="detail-row">
-                <span class="label">Interstate</span>
-                <span class="value">${interstateDeaths.toLocaleString()}</span>
-              </div>
-            ` : ''}
-            ${extrasystemicDeaths > 0 ? `
-              <div class="detail-row">
-                <span class="label">Extrasystemic</span>
-                <span class="value">${extrasystemicDeaths.toLocaleString()}</span>
-              </div>
-            ` : ''}
-          </div>
+          <div class="conflict-breakdown-section" style="margin-top: 10px; margin-bottom: 8px;">
+            <div style="font-weight: 600; font-size: 12px; color: var(--text-primary); margin-bottom: 4px;">Conflict Breakdown</div>
         `;
+
+        if (internalDeaths > 0) {
+          html += `
+            <div class="detail-row" style="padding: 3px 0 3px 8px;">
+              <span class="label">Internal</span>
+              <span class="value">${internalDeaths.toLocaleString()}</span>
+            </div>
+          `;
+        }
+
+        if (interstateDeaths > 0) {
+          html += `
+            <div class="detail-row" style="padding: 3px 0 3px 8px;">
+              <span class="label">Interstate</span>
+              <span class="value">${interstateDeaths.toLocaleString()}</span>
+            </div>
+          `;
+        }
+
+        if (extrasystemicDeaths > 0) {
+          html += `
+            <div class="detail-row" style="padding: 3px 0 3px 8px;">
+              <span class="label">Extrasystemic</span>
+              <span class="value">${extrasystemicDeaths.toLocaleString()}</span>
+            </div>
+          `;
+        }
+
+        html += `</div>`;
       }
 
-      // Belligerents & Parties list
       if (conflictList.length > 0) {
-        html += `<div style="margin-top: 14px; font-weight: 600; font-size: 12px; color: var(--text-primary); border-top: 1px solid var(--border-color); padding-top: 8px;">Belligerents & Parties:</div>`;
+        html += `<div style="margin-top: 10px; font-weight: 600; font-size: 12px; color: var(--text-primary);">Belligerents & Parties:</div>`;
         conflictList.forEach(c => {
           html += `
             <div style="background: var(--bg-main); padding: 8px; border-radius: 4px; margin-top: 6px; border: 1px solid var(--border-color);">
