@@ -191,7 +191,7 @@ body {
   background-color: var(--bg-panel);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 8px 16px;
+  padding: 12px 18px;
   box-shadow: var(--shadow-subtle);
 }
 
@@ -200,7 +200,7 @@ select#filter-region,
 select#filter-type,
 select#filter-incomp {
   width: 210px;
-  height: 36px;
+  height: 42px;
   border-radius: 10px;
   border: 1px solid #E5E7EB;
   background-color: #FFFFFF;
@@ -218,7 +218,7 @@ select#filter-incomp {
   -moz-appearance: none;
 
   /* Clean base64 encoded custom chevron icon */
-  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM1RjYzNjgiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJtNiA5IDYgNiA2LTYiLz48L3N2Zz4=');
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ4dPSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM1RjYzNjgiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJtNiA5IDYgNiA2LTYiLz48L3N2Zz4=');
   background-repeat: no-repeat;
   background-position: right 14px center;
   background-size: 16px 16px;
@@ -246,15 +246,15 @@ select#filter-incomp:focus {
 .btn-secondary,
 .btn-reset,
 button#btn-reset-filters {
-  height: 36px;
+  height: 42px;
   padding: 0 18px;
-  background-color: #4f81ee;
+  background-color: transparent;
   border: 1px solid #E5E7EB;
   border-radius: 10px;
   font-family: inherit;
   font-size: 14px;
   font-weight: 500;
-  color: #f4f6f8;
+  color: #374151;
   cursor: pointer;
   white-space: nowrap;
   transition: all var(--transition-fast);
@@ -302,8 +302,8 @@ button#btn-reset-filters:focus {
   background-color: var(--bg-ocean);
 }
 
-/* Country Paths Styling */
-.country-path {
+/* Country Paths Styling - Strictly scoped to dashboard map */
+.country-layer path.country-path {
   stroke: #FFFFFF;                  /* Country border: white */
   stroke-width: 0.7px;              /* Stroke width: 0.7px */
   stroke-linejoin: round;
@@ -312,16 +312,16 @@ button#btn-reset-filters:focus {
   transition: filter var(--transition-fast);
 }
 
-.country-path:hover {
+.country-layer path.country-path:hover {
   filter: brightness(1.12);         /* Hover: slightly brighter */
 }
 
-.country-path.active-conflict {
+.country-layer path.country-path.active-conflict {
   stroke: #FFFFFF;
   stroke-width: 0.7px;
 }
 
-.country-path.selected {
+.country-layer path.country-path.selected {
   stroke: black !important;
   stroke-width: 2px !important;
 }
@@ -729,7 +729,7 @@ input[type="range"]#year-slider::-webkit-slider-thumb:hover {
   display: none !important;
 }
 
-/* Responsive Rules */
+/* Responsive Rules for Dashboard */
 @media (max-width: 1200px) {
   .app-layout {
     grid-template-columns: 1fr;
@@ -763,3 +763,2365 @@ input[type="range"]#year-slider::-webkit-slider-thumb:hover {
     align-items: flex-start;
   }
 }
+
+/* ==========================================================================
+   Chapter 02 — Sticky Storytelling Architecture (Figma Node 13:330 & 22:524)
+   ========================================================================== */
+
+.narrative-story-scroll {
+  position: relative;
+  width: 100%;
+  height: 250vh; /* Outer container providing scroll distance */
+  background-color: #FFFFFF;
+  border-top: 1px solid var(--border-color);
+  margin-top: 40px;
+}
+
+.narrative-story-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #FFFFFF;
+}
+
+/* Sticky Text Layer (Anchored in Background) */
+.narrative-story-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 1440px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.narrative-story-text .figma-container-13-412 {
+  max-width: 754px;
+  width: 100%;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  text-align: center;
+}
+
+.narrative-story-text .figma-heading-13-332 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 58px;
+  font-weight: 700;
+  line-height: 75.4px;
+  letter-spacing: -2.32px;
+  color: #000000;
+  text-align: center;
+  margin: 0;
+  max-width: 754px;
+  width: 100%;
+}
+
+.narrative-story-text .figma-highlight-red {
+  color: #8E0A0A; /* Exact Figma solid red color r:0.557, g:0.038, b:0.038 */
+}
+
+.narrative-story-text .figma-intro-group-13-411 {
+  max-width: 415px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.narrative-story-text .figma-intro-line1 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 30px;
+  color: #000000;
+  margin: 0;
+  text-align: center;
+}
+
+.narrative-story-text .figma-intro-line2 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 32px;
+  color: #8E0A0A;
+  margin: 0;
+  text-align: center;
+}
+
+.narrative-story-text .figma-intro-line3 {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 30px;
+  color: #000000;
+  margin: 0;
+  text-align: center;
+}
+
+/* Foreground Scroll-Driven Card Layer (z-index: 10 over text) */
+.narrative-card-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+  transform: translate3d(0, 110vh, 0);
+  will-change: transform;
+}
+
+.narrative-card-layer .figma-frame-73-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1280px;
+  padding: 0 40px;
+  pointer-events: auto;
+}
+
+.narrative-card-layer .cards-frame-png {
+  max-width: 1080px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==========================================================================
+   Chapter 03 — Full-Screen Narrative Chapter: Scale of Loss (Figma Node 26:526)
+   ========================================================================== */
+
+.narrative-chapter-loss {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  min-height: 100vh;
+  background-color: #FFFFFF;
+  
+  /* Scoped CSS Dotted Grid Pattern matching Figma Node 26:526 */
+  background-image: radial-gradient(#CBD2DC 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 15;
+}
+
+.narrative-chapter-loss .loss-container {
+  position: relative;
+  max-width: 780px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  /* Subtle scroll reveal animation */
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.narrative-chapter-loss.is-visible .loss-container {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.narrative-chapter-loss .loss-graphic-img {
+  max-width: 742px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==========================================================================
+   Chapter 04 — Full-Screen Narrative Chapter: Make It Personal (Figma Node 14:498)
+   ========================================================================== */
+
+.narrative-chapter-personal {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  min-height: 100vh;
+  background-color: #FFFFFF;
+  
+  /* Scoped CSS Dotted Grid Pattern matching Figma Node 14:498 */
+  background-image: radial-gradient(#CBD2DC 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 15;
+}
+
+.narrative-chapter-personal .personal-container {
+  position: relative;
+  max-width: 820px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  /* Subtle scroll reveal animation */
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.narrative-chapter-personal.is-visible .personal-container {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.narrative-chapter-personal .personal-graphic-img {
+  max-width: 760px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==========================================================================
+   Chapter 05 — Calculator 01 Component Namespace (.narrative-calculator-01)
+   ========================================================================== */
+
+.narrative-calculator-01 {
+  width: 100%;
+  background-color: #FFFFFF;
+  padding: 60px 24px 100px 24px;
+  
+}
+
+.narrative-calculator-01 .calc-container {
+  max-width: 840px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+/* Section Header */
+.narrative-calculator-01 .calc-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.narrative-calculator-01 .calc-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+  color: #5F6368;
+  max-width: 620px;
+  line-height: 1.5;
+  margin: 0;
+  text-align: center;
+}
+
+/* Controls Panel */
+.narrative-calculator-01 .calc-controls-panel {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  background-color: #FAFAF9;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 24px 28px;
+}
+
+.narrative-calculator-01 .calc-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.narrative-calculator-01 .calc-control-group.country-select-group {
+  flex: 1;
+}
+
+.narrative-calculator-01 .calc-control-group.year-slider-group {
+  flex: 1;
+}
+
+.narrative-calculator-01 .calc-control-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #5F6368;
+  text-transform: uppercase;
+}
+
+.narrative-calculator-01 .calc-search-select {
+  position: relative;
+  width: 100%;
+}
+
+.narrative-calculator-01 .calc-select-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 40px 0 16px;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1E293B;
+  outline: none;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.narrative-calculator-01 .calc-select-input:focus {
+  border-color: #8E0A0A;
+  box-shadow: 0 0 0 3px rgba(142, 10, 10, 0.12);
+}
+
+.narrative-calculator-01 .calc-select-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #5F6368;
+}
+
+.narrative-calculator-01 .calc-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  z-index: 100;
+  text-align: left;
+}
+
+.narrative-calculator-01 .calc-dropdown-item {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #1E293B;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 120ms ease;
+}
+
+.narrative-calculator-01 .calc-dropdown-item:hover {
+  background-color: #F1F5F9;
+  color: #8E0A0A;
+  font-weight: 500;
+}
+
+.narrative-calculator-01 .calc-dropdown-item.no-match {
+  color: #94A3B8;
+  font-style: italic;
+  cursor: default;
+  text-align: left;
+}
+
+.narrative-calculator-01 .calc-year-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.narrative-calculator-01 .calc-year-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #8E0A0A;
+}
+
+.narrative-calculator-01 .calc-slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.narrative-calculator-01 input[type="range"]#calc-year-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #CBD5E1;
+  outline: none;
+  cursor: pointer;
+}
+
+.narrative-calculator-01 input[type="range"]#calc-year-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #8E0A0A;
+  cursor: pointer;
+  transition: transform 150ms ease;
+}
+
+.narrative-calculator-01 input[type="range"]#calc-year-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.narrative-calculator-01 .calc-slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #64748B;
+  font-weight: 500;
+}
+
+/* Result Card A */
+.narrative-calculator-01 .calc-result-card {
+  position: relative;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 36px 32px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.narrative-calculator-01 .calc-card-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #475569;
+  text-transform: uppercase;
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 8px;
+  width: 100%;
+}
+
+.narrative-calculator-01 .calc-metrics-grid {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+}
+
+.narrative-calculator-01 .calc-metric-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.narrative-calculator-01 .calc-metric-val {
+  font-family: 'Inter', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.narrative-calculator-01 .calc-metric-val.red-accent {
+  color: #8E0A0A;
+}
+
+.narrative-calculator-01 .calc-metric-lbl {
+  font-size: 13px;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.narrative-calculator-01 .calc-hero-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.narrative-calculator-01 .calc-hero-val.red-accent {
+  font-family: 'Inter', sans-serif;
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #8E0A0A;
+  letter-spacing: -1px;
+}
+
+.narrative-calculator-01 .calc-hero-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+  color: #334155;
+  max-width: 520px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.narrative-calculator-01 .calc-secondary-pct {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748B;
+  background-color: #F8FAFC;
+  padding: 4px 12px;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+}
+
+/* Population Scale Track */
+.narrative-calculator-01 .calc-scale-track-wrapper {
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.narrative-calculator-01 .calc-scale-track {
+  width: 100%;
+  height: 8px;
+  background-color: #CBD2DC;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.narrative-calculator-01 .calc-scale-bar {
+  height: 100%;
+  background-color: #8E0A0A;
+  border-radius: 4px;
+  transition: width 300ms ease-out;
+}
+
+.narrative-calculator-01 .calc-scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #94A3B8;
+}
+
+.narrative-calculator-01 .calc-msg-overlay {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748B;
+  background-color: #F1F5F9;
+  padding: 10px 18px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+/* Comparison Section */
+.narrative-calculator-01 .calc-comparison-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  border-top: 1px solid #E2E8F0;
+  padding-top: 40px;
+}
+
+.narrative-calculator-01 .calc-comp-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.narrative-calculator-01 .calc-comp-eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #8E0A0A;
+}
+
+.narrative-calculator-01 .calc-comp-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+}
+
+.narrative-calculator-01 .calc-comp-select-wrap {
+  width: 100%;
+  max-width: 380px;
+  margin-top: 8px;
+}
+
+.narrative-calculator-01 .calc-comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  width: 100%;
+}
+
+.narrative-calculator-01 .calc-comp-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 24px 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.narrative-calculator-01 .calc-comp-card-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.narrative-calculator-01 .calc-comp-card-year {
+  font-size: 12px;
+  color: #64748B;
+}
+
+.narrative-calculator-01 .calc-comp-hero.red-accent {
+  font-family: 'Inter', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #8E0A0A;
+  margin: 6px 0;
+}
+
+.narrative-calculator-01 .calc-comp-deaths,
+.narrative-calculator-01 .calc-comp-pop {
+  font-size: 13px;
+  color: #475569;
+}
+
+/* Disclaimer */
+.narrative-calculator-01 .calc-disclaimer-wrap {
+  text-align: center;
+  border-top: 1px solid #F1F5F9;
+  padding-top: 24px;
+}
+
+.narrative-calculator-01 .calc-disclaimer {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #94A3B8;
+  line-height: 1.5;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Continuous Blood Flow Transition Scene Architecture (Chapters 06 -> 07)
+   ========================================================================== */
+
+.narrative-lifetime-scene {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+.narrative-lifetime-scene .blood-flow-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.narrative-lifetime-scene .blood-flow-path {
+  fill: #8E0A0A;
+}
+
+/* Question mark origin styling */
+.lifetime-question-mark {
+  display: inline-block;
+  color: #8E0A0A;
+  position: relative;
+  z-index: 25;
+  line-height: 1;
+}
+
+/* Target letter 't' styling with animated color transition */
+.lifetime-target-letter {
+  display: inline-block;
+  color: #000000;
+  transition: color 200ms ease;
+  position: relative;
+  z-index: 25;
+  line-height: 1;
+}
+
+.lifetime-target-letter.touched {
+  color: #8E0A0A;
+}
+
+/* ==========================================================================
+   Chapter 06 — Full-Screen Narrative Chapter: Entire Lifetime Intro (Figma Node 16:517)
+   ========================================================================== */
+
+.narrative-chapter-moment {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  min-height: 100vh;
+  background-color: #FFFFFF;
+  
+  /* Scoped Edge-to-Edge CSS Dotted Grid Pattern matching Figma Node 16:517 */
+  background-image: radial-gradient(#CBD2DC 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 15;
+}
+
+.narrative-chapter-moment .moment-container {
+  position: relative;
+  max-width: 754px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+  
+  /* Subtle scroll reveal animation */
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.narrative-chapter-moment.is-visible .moment-container {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.narrative-chapter-moment .moment-subhead {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: -0.8px;
+  color: #000000;
+  margin: 0;
+  text-align: center;
+}
+
+.narrative-chapter-moment .moment-headline {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 58px;
+  font-weight: 700;
+  line-height: 75.4px;
+  letter-spacing: -2.32px;
+  color: #8E0A0A; /* Exact Figma solid red #8E0A0A */
+  margin: 0;
+  text-align: center;
+  max-width: 754px;
+  width: 100%;
+}
+
+/* ==========================================================================
+   Chapter 07 — Full-Screen Narrative Chapter: Lifetime Risk Question (Figma Node 32:108)
+   ========================================================================== */
+
+.narrative-chapter-lifetime-question {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  min-height: 100vh;
+  background-color: #FFFFFF;
+  
+  /* Scoped Edge-to-Edge CSS Dotted Grid Pattern matching Figma Node 32:108 */
+  background-image: radial-gradient(#CBD2DC 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 15;
+}
+
+.narrative-chapter-lifetime-question .lifetime-question-container {
+  position: relative;
+  max-width: 754px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  
+  /* Subtle scroll reveal animation */
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.narrative-chapter-lifetime-question.is-visible .lifetime-question-container {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.narrative-chapter-lifetime-question .lifetime-question-headline {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 58px;
+  font-weight: 700;
+  line-height: 75.4px;
+  letter-spacing: -2.32px;
+  color: #000000;
+  margin: 0;
+  text-align: center;
+  max-width: 754px;
+  width: 100%;
+}
+
+/* ==========================================================================
+   Chapter 08 — Calculator 02 Namespace (.narrative-calculator-02)
+   ========================================================================== */
+
+.narrative-calculator-02 {
+  width: 100%;
+  background-color: #FFFFFF;
+  padding: 60px 24px 120px 24px;
+  
+
+  /* Scoped CSS Dotted Grid Pattern matching narrative chapters */
+  background-image: radial-gradient(#CBD2DC 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+}
+
+.narrative-calculator-02 .calc2-container {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+/* Controls Panel */
+.narrative-calculator-02 .calc2-controls-panel {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 14px;
+  padding: 24px 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.narrative-calculator-02 .calc2-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.narrative-calculator-02 .calc2-control-group.country-select-group {
+  flex: 2;
+}
+
+.narrative-calculator-02 .calc2-control-group.year-select-group {
+  flex: 1;
+}
+
+.narrative-calculator-02 .calc2-control-group.btn-group {
+  flex: 1;
+}
+
+.narrative-calculator-02 .calc2-control-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #5F6368;
+  text-transform: uppercase;
+}
+
+.narrative-calculator-02 .calc2-search-select {
+  position: relative;
+  width: 100%;
+}
+
+.narrative-calculator-02 .calc2-select-input {
+  width: 100%;
+  height: 46px;
+  padding: 0 40px 0 16px;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1E293B;
+  outline: none;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.narrative-calculator-02 .calc2-select-input:focus {
+  border-color: #8E0A0A;
+  box-shadow: 0 0 0 3px rgba(142, 10, 10, 0.12);
+}
+
+.narrative-calculator-02 .calc2-select-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #5F6368;
+}
+
+.narrative-calculator-02 .calc2-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  z-index: 100;
+  text-align: left;
+}
+
+.narrative-calculator-02 .calc2-dropdown-item {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #1E293B;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 120ms ease;
+}
+
+.narrative-calculator-02 .calc2-dropdown-item:hover {
+  background-color: #F1F5F9;
+  color: #8E0A0A;
+  font-weight: 500;
+}
+
+.narrative-calculator-02 .calc2-dropdown-item.no-match {
+  color: #94A3B8;
+  font-style: italic;
+  cursor: default;
+  text-align: left;
+}
+
+/* Native Year Select Styling */
+.narrative-calculator-02 .calc2-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.narrative-calculator-02 select.calc2-native-select {
+  width: 100%;
+  height: 46px;
+  padding: 0 16px;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1E293B;
+  outline: none;
+  cursor: pointer;
+}
+
+.narrative-calculator-02 select.calc2-native-select:focus {
+  border-color: #8E0A0A;
+  box-shadow: 0 0 0 3px rgba(142, 10, 10, 0.12);
+}
+
+/* Primary Action Button */
+.narrative-calculator-02 .calc2-btn-primary {
+  width: 100%;
+  height: 46px;
+  background-color: #8E0A0A;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background-color 150ms ease, transform 100ms ease;
+}
+
+.narrative-calculator-02 .calc2-btn-primary:hover {
+  background-color: #6E0707;
+}
+
+.narrative-calculator-02 .calc2-btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Warning Card */
+.narrative-calculator-02 .calc2-warning-card {
+  background-color: #FEF2F2;
+  border: 1px solid #FCA5A5;
+  border-radius: 12px;
+  padding: 18px 24px;
+  text-align: center;
+}
+
+.narrative-calculator-02 .calc2-warning-msg {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #991B1B;
+  margin: 0;
+}
+
+/* Main Hero Result Card */
+.narrative-calculator-02 .calc2-result-card {
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 16px;
+  padding: 44px 36px;
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  text-align: center;
+}
+
+.narrative-calculator-02 .calc2-hero-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.narrative-calculator-02 .calc2-eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #64748B;
+  text-transform: uppercase;
+}
+
+.narrative-calculator-02 .calc2-hero-title {
+  margin: 4px 0;
+}
+
+.narrative-calculator-02 .calc2-hero-number.red-accent {
+  font-family: 'Inter', sans-serif;
+  font-size: 64px;
+  font-weight: 800;
+  line-height: 1;
+  color: #8E0A0A;
+  letter-spacing: -2px;
+}
+
+.narrative-calculator-02 .calc2-hero-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #0F172A;
+  text-transform: uppercase;
+}
+
+/* Metrics Grid */
+.narrative-calculator-02 .calc2-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.narrative-calculator-02 .calc2-metric-box {
+  background-color: #FAFAF9;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.narrative-calculator-02 .calc2-metric-box.red-border {
+  border-color: #FECDD3;
+  background-color: #FFF1F2;
+}
+
+.narrative-calculator-02 .calc2-metric-box.highlight-border {
+  border-color: #CBD5E1;
+}
+
+.narrative-calculator-02 .calc2-metric-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.narrative-calculator-02 .calc2-metric-num.red-accent {
+  color: #8E0A0A;
+}
+
+.narrative-calculator-02 .calc2-metric-lbl {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748B;
+}
+
+/* Horizontal Lifetime Timeline */
+.narrative-calculator-02 .calc2-timeline-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1px solid #F1F5F9;
+  padding-top: 24px;
+}
+
+.narrative-calculator-02 .calc2-timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #64748B;
+}
+
+.narrative-calculator-02 .calc2-timeline-strip {
+  display: flex;
+  gap: 3px;
+  width: 100%;
+  height: 48px;
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 4px;
+  overflow-x: auto;
+}
+
+.narrative-calculator-02 .calc2-year-block {
+  flex: 1;
+  min-width: 14px;
+  height: 100%;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 120ms ease, filter 120ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.narrative-calculator-02 .calc2-year-block:hover {
+  transform: scaleY(1.1);
+  filter: brightness(1.1);
+}
+
+.narrative-calculator-02 .calc2-year-block.conflict {
+  background-color: #8E0A0A;
+}
+
+.narrative-calculator-02 .calc2-year-block.peaceful {
+  background-color: #CBD5E1;
+}
+
+.narrative-calculator-02 .calc2-block-label {
+  display: none;
+  font-size: 9px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.narrative-calculator-02 .calc2-timeline-legend {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #64748B;
+}
+
+.narrative-calculator-02 .calc2-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.narrative-calculator-02 .calc2-legend-box {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.narrative-calculator-02 .calc2-legend-box.conflict {
+  background-color: #8E0A0A;
+}
+
+.narrative-calculator-02 .calc2-legend-box.peaceful {
+  background-color: #CBD5E1;
+}
+
+/* Disclaimer Note */
+.narrative-calculator-02 .calc2-disclaimer-wrap {
+  text-align: center;
+  border-top: 1px solid #F1F5F9;
+  padding-top: 20px;
+  width: 100%;
+}
+
+.narrative-calculator-02 .calc2-disclaimer {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #94A3B8;
+  line-height: 1.5;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Chapter 09 — Full-Screen Narrative Chapter: Human Cost (Figma Node 42:213)
+   ========================================================================== */
+
+.narrative-chapter-human-cost {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  min-height: 100vh;
+  background-color: #FFFFFF;
+  
+  /* Scoped Edge-to-Edge Dotted Grid Background */
+  background-image: radial-gradient(#CBD2DC 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 15;
+  
+}
+
+.narrative-chapter-human-cost .human-cost-illustration {
+  position: absolute !important;
+
+  width: 410.76px !important;
+  height: 430.54px !important;
+
+  /* MANUAL POSITION */
+  top: 30px !important;
+  right: 110px !important;
+
+  max-width: none !important;
+
+  pointer-events: none;
+  z-index: 2;
+}
+
+.narrative-chapter-human-cost .human-cost-illustration svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.narrative-chapter-human-cost .human-cost-illustration svg,
+.narrative-chapter-human-cost .human-cost-illustration img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Centered Typography Content */
+.narrative-chapter-human-cost .human-cost-content {
+  position: relative;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+  z-index: 10;
+  
+  /* Subtle scroll reveal animation */
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.narrative-chapter-human-cost.is-visible .human-cost-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.narrative-chapter-human-cost .human-cost-subhead {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.8px;
+  color: #000000;
+  margin: 0;
+  text-align: center;
+}
+
+.narrative-chapter-human-cost .human-cost-headline {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 58px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -2.32px;
+  color: #8E0A0A; /* Exact Figma solid red #8E0A0A */
+  margin: 0;
+  text-align: center;
+  max-width: 960px;
+  width: 100%;
+}
+
+/* ==========================================================================
+   Chapter 10 — Full-Screen Narrative Chapter: More Time in Conflict Question (Figma Node 42:234)
+   ========================================================================== */
+
+.narrative-chapter-more-time {
+  position: relative;
+  width: 100%;
+  min-height: 60vh;
+  background-color: #FFFFFF;
+  
+  /* Scoped Edge-to-Edge Dotted Grid Background */
+  background-image: radial-gradient(#CBD2DC 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 15;
+  
+}
+
+.narrative-chapter-more-time .more-time-illustration {
+  position: absolute;
+  width: 270px;
+  height: auto;
+  bottom: -20px;
+  left: 150px;
+  max-width: calc(100% - 40px);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.narrative-chapter-more-time .more-time-illustration img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Centered Single Statement Headline */
+.narrative-chapter-more-time .more-time-content {
+  position: relative;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 10;
+  
+  /* Subtle scroll reveal animation */
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.narrative-chapter-more-time.is-visible .more-time-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.narrative-chapter-more-time .more-time-headline {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 58px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -2.32px;
+  color: #000000; /* Solid Black #000000 */
+  margin: 0;
+  text-align: center;
+  max-width: 960px;
+  width: 100%;
+}
+
+/* Reduced Motion Fallback */
+@media (prefers-reduced-motion: reduce) {
+  .narrative-story-scroll {
+    height: auto;
+  }
+
+  .narrative-story-sticky {
+    position: static;
+    height: auto;
+  }
+
+  .narrative-story-text {
+    position: static;
+    transform: none;
+    padding: 60px 0;
+  }
+
+  .narrative-card-layer {
+    position: static;
+    transform: none !important;
+    padding-bottom: 60px;
+  }
+
+  .narrative-chapter-loss .loss-container,
+  .narrative-chapter-personal .personal-container,
+  .narrative-chapter-moment .moment-container,
+  .narrative-chapter-lifetime-question .lifetime-question-container,
+  .narrative-chapter-human-cost .human-cost-content,
+  .narrative-chapter-more-time .more-time-content {
+    opacity: 1;
+    transform: none;
+  }
+
+  .narrative-lifetime-scene .blood-flow-svg {
+    display: none;
+  }
+
+  .lifetime-target-letter {
+    color: #8E0A0A;
+  }
+}
+
+/* Responsive adjustments for illustration positioning & scaling */
+@media (max-width: 1440px) {
+  .narrative-chapter-human-cost .human-cost-illustration {
+    right: 30px;
+  }
+
+  .narrative-chapter-more-time .more-time-illustration {
+    left: 30px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .narrative-chapter-human-cost .human-cost-illustration {
+    width: 360px;
+    height: auto;
+    top: 32px;
+    right: 32px;
+  }
+
+  .narrative-chapter-more-time .more-time-illustration {
+    width: 280px;
+    height: auto;
+    bottom: 32px;
+    left: 32px;
+  }
+
+  .narrative-chapter-human-cost .human-cost-headline,
+  .narrative-chapter-more-time .more-time-headline {
+    font-size: 50px;
+    letter-spacing: -2px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .narrative-chapter-human-cost .human-cost-illustration {
+    width: 310px;
+    height: auto;
+    top: 24px;
+    right: 24px;
+  }
+
+  .narrative-chapter-more-time .more-time-illustration {
+    width: 240px;
+    height: auto;
+    bottom: 24px;
+    left: 24px;
+  }
+
+  .narrative-chapter-human-cost .human-cost-headline,
+  .narrative-chapter-more-time .more-time-headline {
+    font-size: 42px;
+    letter-spacing: -1.6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .narrative-story-text .figma-heading-13-332 {
+    font-size: 36px;
+    line-height: 48px;
+    letter-spacing: -1px;
+  }
+
+  .narrative-story-text .figma-intro-line1,
+  .narrative-story-text .figma-intro-line2,
+  .narrative-story-text .figma-intro-line3 {
+    font-size: 17px;
+    line-height: 26px;
+  }
+
+  .narrative-chapter-loss,
+  .narrative-chapter-personal,
+  .narrative-chapter-moment,
+  .narrative-chapter-lifetime-question,
+  .narrative-chapter-human-cost,
+  .narrative-chapter-more-time {
+    padding: 60px 20px;
+  }
+
+  .narrative-chapter-human-cost .human-cost-illustration,
+  .narrative-chapter-more-time .more-time-illustration {
+    position: static;
+    width: 260px;
+    height: auto;
+    max-width: 80%;
+    margin: 0 auto 24px auto;
+  }
+
+  .narrative-chapter-human-cost .human-cost-subhead {
+    font-size: 17px;
+    line-height: 24px;
+  }
+
+  .narrative-chapter-human-cost .human-cost-headline,
+  .narrative-chapter-more-time .more-time-headline {
+    font-size: 34px;
+    line-height: 44px;
+    letter-spacing: -1px;
+  }
+
+  .narrative-chapter-human-cost .human-cost-headline br,
+  .narrative-chapter-more-time .more-time-headline br {
+    display: none;
+  }
+
+  .narrative-chapter-loss .loss-graphic-img,
+  .narrative-chapter-personal .personal-graphic-img {
+    max-width: 100%;
+  }
+
+  .narrative-chapter-moment .moment-headline,
+  .narrative-chapter-lifetime-question .lifetime-question-headline {
+    font-size: 36px;
+    line-height: 48px;
+    letter-spacing: -1px;
+  }
+
+  .narrative-calculator-01 .calc-controls-panel {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .narrative-calculator-01 .calc-comparison-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .narrative-calculator-01 .calc-hero-val.red-accent {
+    font-size: 34px;
+  }
+
+  .narrative-calculator-02 .calc2-controls-panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .narrative-calculator-02 .calc2-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .narrative-calculator-02 .calc2-hero-number.red-accent {
+    font-size: 48px;
+  }
+
+  .narrative-calculator-02 .calc2-result-card {
+    padding: 28px 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .narrative-story-text .figma-heading-13-332 {
+    font-size: 28px;
+    line-height: 36px;
+    letter-spacing: -0.5px;
+  }
+
+  .narrative-story-text .figma-intro-line1,
+  .narrative-story-text .figma-intro-line2,
+  .narrative-story-text .figma-intro-line3 {
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .narrative-chapter-moment .moment-headline,
+  .narrative-chapter-lifetime-question .lifetime-question-headline,
+  .narrative-chapter-more-time .more-time-headline {
+    font-size: 28px;
+    line-height: 36px;
+    letter-spacing: -0.5px;
+  }
+}
+
+/* ==========================================================================
+   Chapter 11 — ScatterPlot Component Styles (.narrative-scatterplot-section)
+   ========================================================================== */
+
+.narrative-scatterplot-section {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  min-height: auto;
+  background-color: #FFFFFF;
+  
+  /* Scoped Edge-to-Edge Dotted Grid Background */
+  background-image: radial-gradient(#CBD2DC 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 15;
+  
+}
+
+.narrative-scatterplot-container {
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+  
+  /* Scroll reveal animation */
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.narrative-scatterplot-section.is-visible .narrative-scatterplot-container {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scatter-wrapper {
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 16px;
+  padding: 32px 36px;
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.scatter-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  
+}
+
+.scatter-legend-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.scatter-region-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.scatter-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #FAFAF9;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 6px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.scatter-chip:hover {
+  background-color: #F1F5F9;
+  border-color: #CBD5E1;
+}
+
+.scatter-chip.active {
+  background-color: #0F172A;
+  border-color: #0F172A;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.scatter-chip-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.scatter-chart-box {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Custom Interactive Tooltip */
+.scatter-tooltip {
+  position: absolute;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  z-index: 100;
+  min-width: 220px;
+  font-family: 'Inter', sans-serif;
+  transition: opacity 120ms ease;
+}
+
+.scatter-tooltip.hidden {
+  display: none !important;
+}
+
+.scatter-tooltip .tt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #F1F5F9;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.scatter-tooltip .tt-country {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.scatter-tooltip .tt-region {
+  font-size: 10px;
+  font-weight: 700;
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.scatter-tooltip .tt-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.scatter-tooltip .tt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 12px;
+}
+
+.scatter-tooltip .tt-lbl {
+  color: #64748B;
+}
+
+.scatter-tooltip .tt-val {
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.scatter-tooltip .tt-val.red {
+  color: #8E0A0A;
+}
+
+.scatter-footer-note {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #64748B;
+  text-align: center;
+  border-top: 1px solid #F1F5F9;
+  padding-top: 14px;
+}
+
+@media (max-width: 768px) {
+  .scatter-wrapper {
+    padding: 20px 16px;
+  }
+
+  .scatter-controls-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+/* =========================================================
+   FINAL CONCLUSION
+   ========================================================= */
+
+.narrative-final-conclusion {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+
+  background-color: #FFFFFF;
+
+  /* Same dotted grid used throughout the narrative */
+  background-image: radial-gradient(
+    #CBD2DC 1.5px,
+    transparent 1.5px
+  );
+  background-size: 28px 28px;
+  background-position: 0 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 100px 40px;
+  box-sizing: border-box;
+
+  overflow: hidden;
+  
+}
+
+
+.final-conclusion-content {
+  width: 100%;
+  max-width: 1100px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  /* Scroll reveal animation */
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+
+.narrative-final-conclusion.is-visible .final-conclusion-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.final-conclusion-eyebrow {
+  display: block;
+
+  margin-bottom: 28px;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+
+  color: #667085;
+}
+
+
+.final-conclusion-title {
+  margin: 0;
+
+  max-width: 1000px;
+
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(42px, 5vw, 72px);
+  line-height: 1.05;
+  letter-spacing: -2.5px;
+  font-weight: 700;
+
+  color: #9F0808;
+}
+
+
+.final-conclusion-description {
+  max-width: 620px;
+
+  margin: 38px 0 0;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: #111111;
+}
+
+
+.final-conclusion-divider {
+  width: 60px;
+  height: 2px;
+
+  margin: 48px 0 42px;
+
+  background-color: #9F0808;
+}
+
+
+.final-conclusion-closing {
+  margin: 0;
+
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(24px, 2.5vw, 36px);
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.8px;
+
+  color: #111111;
+}
+
+
+/* =========================================================
+   FINAL CONCLUSION — MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .narrative-final-conclusion {
+    min-height: 100svh;
+    padding: 80px 24px;
+  }
+
+  .final-conclusion-eyebrow {
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    margin-bottom: 22px;
+  }
+
+  .final-conclusion-title {
+    font-size: 40px;
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+  }
+
+  .final-conclusion-description {
+    margin-top: 28px;
+    font-size: 17px;
+    line-height: 1.45;
+  }
+
+  .final-conclusion-divider {
+    margin: 38px 0 32px;
+  }
+
+  .final-conclusion-closing {
+    font-size: 25px;
+    line-height: 1.25;
+  }
+
+}
+
+/* FINAL POSITION — Chapter 10 Soldier */
+.narrative-chapter-more-time .more-time-illustration {
+  width: 270px !important;
+  height: auto !important;
+  bottom: -50px !important;
+  left: 150px !important;
+}
+
+/* ==========================================================================
+   SCROLL-DRIVEN CINEMATIC INTRO (Scoped Component Styles)
+   ========================================================================== */
+
+/* Outer Scroll Track (500vh providing scroll distance for Pudding-style scrollytelling) */
+.cinematic-intro-scroll-track {
+  position: relative;
+  width: 100%;
+  height: 500vh;
+  background-color: #0F172A; /* Fallback dark bg */
+}
+
+/* Sticky Viewport Container (100vh viewport) */
+.cinematic-intro-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  background-color: #FFFFFF;
+}
+
+/* Full-Viewport Video Background */
+.cinematic-intro-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateZ(0);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  z-index: 1;
+  opacity: 0.95;
+  filter: contrast(1.05) brightness(0.98);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Radial Vignette Overlay for Text Readability */
+.cinematic-intro-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.94) 100%);
+  z-index: 2;
+  pointer-events: none;
+  backface-visibility: hidden;
+}
+
+/* Scrollytelling Fact Container */
+.cinematic-intro-facts {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Individual Floating Fact Element */
+.cinematic-intro-fact {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, 80vh, 0);
+  width: 100%;
+  max-width: 860px;
+  padding: 0 28px;
+  box-sizing: border-box;
+  text-align: center;
+  opacity: 0;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transition: opacity 80ms linear;
+}
+
+.cinematic-fact-text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(22px, 3.2vw, 42px);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -1.2px;
+  color: #0F172A;
+  margin: 0;
+  text-align: center;
+  text-shadow: 0 2px 12px rgba(255, 255, 255, 0.95);
+}
+
+/* Subtle Scroll Prompt */
+.cinematic-scroll-prompt {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #64748B;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  z-index: 10;
+  opacity: 0.85;
+}
+
+/* Statement Section (Revealed after video track) */
+.cinematic-statement-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  background-color: #FFFFFF;
+
+  /* Edge-to-edge dotted grid matching narrative sections */
+  background-image: radial-gradient(#CBD2DC 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 15;
+  border-top: 1px solid var(--border-color);
+}
+
+.cinematic-statement-block {
+  max-width: 920px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 28px;
+
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 800ms ease-out, transform 800ms ease-out;
+}
+
+.cinematic-statement-section.is-visible .cinematic-statement-block {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cinematic-statement-headline {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(36px, 4.5vw, 64px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -2.5px;
+  color: #000000;
+  margin: 0;
+  text-align: center;
+}
+
+.cinematic-statement-subtext {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 500;
+  line-height: 1.5;
+  color: #475569;
+  margin: 0;
+  text-align: center;
+}
+
+/* ==========================================================================
+   CINEMATIC INTRO — TITLE SECTION
+   ========================================================================== */
+
+.cinematic-title-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  background-color: #FFFFFF;
+  
+  background-image: radial-gradient(#CBD2DC 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 15;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cinematic-title-block {
+  max-width: 900px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 800ms ease-out, transform 800ms ease-out;
+}
+
+.cinematic-title-section.is-visible .cinematic-title-block {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cinematic-title-main {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(38px, 5vw, 68px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  color: #000000;
+  margin: 0;
+}
+
+.cinematic-title-years {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #8E0A0A;
+  background-color: #FDECEC;
+  padding: 6px 18px;
+  border-radius: 20px;
+  border: 1px solid #F7B7B7;
+  margin-top: 4px;
+}
+
+.cinematic-title-subtitle {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 600;
+  line-height: 1.35;
+  color: #334155;
+  margin-top: 16px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .cinematic-intro-scroll-track {
+    height: 450vh;
+  }
+
+  .cinematic-fact-text {
+    font-size: 24px;
+    line-height: 1.35;
+    letter-spacing: -0.5px;
+  }
+
+  .cinematic-statement-headline {
+    font-size: 34px;
+    line-height: 1.2;
+    letter-spacing: -1.2px;
+  }
+
+  .cinematic-title-main {
+    font-size: 36px;
+    letter-spacing: -1.2px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-intro-scroll-track {
+    height: auto;
+  }
+
+  .cinematic-intro-sticky {
+    position: static;
+    height: auto;
+    padding: 60px 0;
+  }
+
+  .cinematic-intro-fact {
+    position: static;
+    transform: none !important;
+    opacity: 1 !important;
+    margin-bottom: 40px;
+  }
+
+  .cinematic-statement-block,
+  .cinematic-title-block {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+

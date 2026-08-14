@@ -1,0 +1,6 @@
+# Temporary scratch & debug files
+scratch/
+.DS_Store
+*.log
+.vscode/
+.idea/

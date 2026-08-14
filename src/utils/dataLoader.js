@@ -1,6 +1,7 @@
 /**
  * DataLoader & Country Lookup Layer Component
  * Ensures 100% robust string/number country ID normalization for Map matching.
+ * Integrated with World Bank Population Dataset (API_SP.POP.TOTL_DS2_en_csv_v2_33112.csv).
  */
 
 export function normalizeCountryId(id) {
@@ -48,25 +49,26 @@ export const NAME_TO_ISO3 = {
   'Central African Rep.': 'CAF', 'Chad': 'TCD', 'China': 'CHN', 'Colombia': 'COL', 'Comoros': 'COM', 'Congo': 'COG',
   'DR Congo (Zaire)': 'COD', 'Democratic Republic of Congo': 'COD', 'Dem. Rep. Congo': 'COD', 'Costa Rica': 'CRI',
   'Croatia': 'HRV', 'Cuba': 'CUB', 'Djibouti': 'DJI', 'Dominican Republic': 'DOM', 'Dominican Rep.': 'DOM',
-  'Ecuador': 'ECU', 'Egypt': 'EGY', 'El Salvador': 'SLV', 'Equatorial Guinea': 'GNQ', 'Eq. Guinea': 'GNQ',
-  'Eritrea': 'ERI', 'Ethiopia': 'ETH', 'France': 'FRA', 'Georgia': 'GEO', 'Ghana': 'GHA', 'Guatemala': 'GTM',
-  'Guinea': 'GIN', 'Guinea-Bissau': 'GNB', 'Guyana': 'GUY', 'Haiti': 'HTI', 'Honduras': 'HND', 'India': 'IND',
-  'Indonesia': 'IDN', 'Iran': 'IRN', 'Iraq': 'IRQ', 'Israel': 'ISR', 'Ivory Coast': 'CIV', "Cote d'Ivoire": 'CIV',
-  "Côte d'Ivoire": 'CIV', 'Jordan': 'JOR', 'Kenya': 'KEN', 'Kuwait': 'KWT', 'Kyrgyzstan': 'KGZ', 'Laos': 'LAO',
-  'Lebanon': 'LBN', 'Lesotho': 'LSO', 'Liberia': 'LBR', 'Libya': 'LBY', 'Macedonia': 'MKD', 'North Macedonia': 'MKD',
-  'Madagascar': 'MDG', 'Malaysia': 'MYS', 'Mali': 'MLI', 'Mauritania': 'MRT', 'Mexico': 'MEX', 'Moldova': 'MDA',
-  'Morocco': 'MAR', 'Mozambique': 'MOZ', 'Myanmar': 'MMR', 'Myanmar (Burma)': 'MMR', 'Nepal': 'NPL', 'Nicaragua': 'NIC',
-  'Niger': 'NER', 'Nigeria': 'NGA', 'North Korea': 'PRK', 'Pakistan': 'PAK', 'Panama': 'PAN', 'Papua New Guinea': 'PNG',
-  'Paraguay': 'PRY', 'Peru': 'PER', 'Philippines': 'PHL', 'Romania': 'ROU', 'Russia': 'RUS', 'Russia (Soviet Union)': 'RUS',
-  'Rwanda': 'RWA', 'Saudi Arabia': 'SAU', 'Senegal': 'SEN', 'Serbia': 'SRB', 'Serbia (Yugoslavia)': 'SRB', 'Yugoslavia': 'SRB',
-  'Sierra Leone': 'SLE', 'Solomon Islands': 'SLB', 'Solomon Is.': 'SLB', 'Somalia': 'SOM', 'South Africa': 'ZAF',
-  'South Korea': 'KOR', 'South Sudan': 'SSD', 'S. Sudan': 'SSD', 'Spain': 'ESP', 'Sri Lanka': 'LKA', 'Sudan': 'SDN',
-  'Suriname': 'SUR', 'Swaziland': 'SWZ', 'eSwatini': 'SWZ', 'Kingdom of eSwatini (Swaziland)': 'SWZ', 'Syria': 'SYR',
-  'Syrian Arab Republic': 'SYR', 'Tajikistan': 'TJK', 'Tanzania': 'TZA', 'Thailand': 'THA', 'Togo': 'TGO',
-  'Trinidad and Tobago': 'TTO', 'Tunisia': 'TUN', 'Turkey': 'TUR', 'Turkmenistan': 'TKM', 'Uganda': 'UGA',
-  'Ukraine': 'UKR', 'United Arab Emirates': 'ARE', 'United Kingdom': 'GBR', 'United States': 'USA',
-  'United States of America': 'USA', 'Uruguay': 'URY', 'Uzbekistan': 'UZB', 'Venezuela': 'VEN', 'Vietnam': 'VNM',
-  'Yemen': 'YEM', 'Yemen (North Yemen)': 'YEM', 'Yemen (South Yemen)': 'YEM', 'Zambia': 'ZMB', 'Zimbabwe': 'ZWE'
+  'Ecuador': 'ECU', 'Egypt': 'EGY', 'Egypt, Arab Rep.': 'EGY', 'El Salvador': 'SLV', 'Equatorial Guinea': 'GNQ',
+  'Eq. Guinea': 'GNQ', 'Eritrea': 'ERI', 'Ethiopia': 'ETH', 'France': 'FRA', 'Georgia': 'GEO', 'Ghana': 'GHA',
+  'Guatemala': 'GTM', 'Guinea': 'GIN', 'Guinea-Bissau': 'GNB', 'Guyana': 'GUY', 'Haiti': 'HTI', 'Honduras': 'HND',
+  'India': 'IND', 'Indonesia': 'IDN', 'Iran': 'IRN', 'Iran, Islamic Rep.': 'IRN', 'Iraq': 'IRQ', 'Israel': 'ISR',
+  'Ivory Coast': 'CIV', "Cote d'Ivoire": 'CIV', "Côte d'Ivoire": 'CIV', 'Jordan': 'JOR', 'Kenya': 'KEN', 'Kuwait': 'KWT',
+  'Kyrgyzstan': 'KGZ', 'Kyrgyz Republic': 'KGZ', 'Laos': 'LAO', 'Lao PDR': 'LAO', 'Lebanon': 'LBN', 'Lesotho': 'LSO',
+  'Liberia': 'LBR', 'Libya': 'LBY', 'Macedonia': 'MKD', 'North Macedonia': 'MKD', 'Madagascar': 'MDG', 'Malaysia': 'MYS',
+  'Mali': 'MLI', 'Mauritania': 'MRT', 'Mexico': 'MEX', 'Moldova': 'MDA', 'Morocco': 'MAR', 'Mozambique': 'MOZ',
+  'Myanmar': 'MMR', 'Myanmar (Burma)': 'MMR', 'Nepal': 'NPL', 'Nicaragua': 'NIC', 'Niger': 'NER', 'Nigeria': 'NGA',
+  'North Korea': 'PRK', 'Korea, Dem. People\'s Rep.': 'PRK', 'South Korea': 'KOR', 'Korea, Rep.': 'KOR',
+  'Pakistan': 'PAK', 'Panama': 'PAN', 'Papua New Guinea': 'PNG', 'Paraguay': 'PRY', 'Peru': 'PER', 'Philippines': 'PHL',
+  'Romania': 'ROU', 'Russia': 'RUS', 'Russian Federation': 'RUS', 'Russia (Soviet Union)': 'RUS', 'Rwanda': 'RWA',
+  'Saudi Arabia': 'SAU', 'Senegal': 'SEN', 'Serbia': 'SRB', 'Sierra Leone': 'SLE', 'Somalia': 'SOM', 'Somalia, Fed. Rep.': 'SOM',
+  'South Africa': 'ZAF', 'South Sudan': 'SSD', 'Spain': 'ESP', 'Sri Lanka': 'LKA', 'Sudan': 'SDN', 'Suriname': 'SUR',
+  'Swaziland': 'SWZ', 'Eswatini': 'SWZ', 'Sweden': 'SWE', 'Switzerland': 'CHE', 'Syria': 'SYR', 'Syrian Arab Republic': 'SYR',
+  'Tajikistan': 'TJK', 'Tanzania': 'TZA', 'Thailand': 'THA', 'Togo': 'TGO', 'Trinidad and Tobago': 'TTO', 'Tunisia': 'TUN',
+  'Turkey': 'TUR', 'Turkiye': 'TUR', 'Turkmenistan': 'TKM', 'Uganda': 'UGA', 'Ukraine': 'UKR', 'United Arab Emirates': 'ARE',
+  'United Kingdom': 'GBR', 'United States': 'USA', 'United States of America': 'USA', 'Uruguay': 'URY', 'Uzbekistan': 'UZB',
+  'Venezuela': 'VEN', 'Venezuela, RB': 'VEN', 'Vietnam': 'VNM', 'Viet Nam': 'VNM', 'Yemen': 'YEM', 'Yemen, Rep.': 'YEM',
+  'Zambia': 'ZMB', 'Zimbabwe': 'ZWE'
 };
 
 /**
@@ -209,8 +211,84 @@ export async function loadApplicationData() {
       });
     });
 
-    console.log(`✓ Matching SVG IDs: ${matchedSvgIds.size}`);
-    console.log(`✓ Missing country mappings:`, Array.from(missingMappings));
+    // 5. Fetch & parse World Bank Population CSV (API_SP.POP.TOTL_DS2_en_csv_v2_33112.csv)
+    const populationMap = new Map(); // countryId -> Map(year -> pop)
+    try {
+      const popResponse = await fetch('API_SP.POP.TOTL_DS2_en_csv_v2_33112.csv');
+      const popText = await popResponse.text();
+
+      const lines = popText.split(/\r?\n/).filter(line => line.trim().length > 0);
+      let headerIndex = -1;
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].includes('"Country Name"') || lines[i].includes('Country Name')) {
+          headerIndex = i;
+          break;
+        }
+      }
+
+      if (headerIndex !== -1) {
+        function parseLine(line) {
+          const result = [];
+          let cur = '';
+          let inQuotes = false;
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char === '"') {
+              inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+              result.push(cur.trim());
+              cur = '';
+            } else {
+              cur += char;
+            }
+          }
+          result.push(cur.trim());
+          return result;
+        }
+
+        const headers = parseLine(lines[headerIndex]);
+        for (let i = headerIndex + 1; i < lines.length; i++) {
+          const values = parseLine(lines[i]);
+          if (values.length >= 5) {
+            const rowObj = {};
+            headers.forEach((h, idx) => {
+              rowObj[h] = values[idx] || '';
+            });
+
+            const countryCode = rowObj['Country Code'];
+            const countryName = rowObj['Country Name'];
+            const iso3 = countryCode || NAME_TO_ISO3[countryName];
+            let cid = null;
+
+            if (iso3 && ISO3_TO_NUMERIC[iso3]) {
+              cid = ISO3_TO_NUMERIC[iso3];
+            } else if (countryNameToId.has(countryName)) {
+              cid = countryNameToId.get(countryName);
+            }
+
+            if (cid) {
+              const normCid = normalizeCountryId(cid);
+              const yearMap = new Map();
+              for (let yr = 1989; yr <= 2025; yr++) {
+                const valStr = rowObj[String(yr)];
+                if (valStr) {
+                  const popVal = parseInt(valStr, 10);
+                  if (!isNaN(popVal) && popVal > 0) {
+                    yearMap.set(yr, popVal);
+                  }
+                }
+              }
+              if (yearMap.size > 0) {
+                populationMap.set(normCid, yearMap);
+              }
+            }
+          }
+        }
+      }
+      console.log(`✓ World Bank population data loaded for ${populationMap.size} countries.`);
+    } catch (popErr) {
+      console.warn('Failed to load API_SP.POP.TOTL_DS2_en_csv_v2_33112.csv:', popErr);
+    }
 
     const availableYears = Array.from(yearIndex.keys()).sort((a, b) => a - b);
     console.log(`✓ Years available: ${availableYears[0]} to ${availableYears[availableYears.length - 1]}`);
@@ -224,6 +302,7 @@ export async function loadApplicationData() {
       records,
       yearIndex,
       countryYearIndex,
+      populationMap,
       earliestYear: availableYears[0] || 1989
     };
 

@@ -140,6 +140,13 @@ export class MapViewer {
   }
 
   /**
+   * Render alias for AppController updateView()
+   */
+  render(countryDeathsMap, activeConflicts, currentYear) {
+    this.updateMap(countryDeathsMap, this.selectedSeverityFilter);
+  }
+
+  /**
    * Creates SVG defs (Soft Glow Filter)
    */
   createArrowDefs() {
@@ -256,15 +263,11 @@ export class MapViewer {
     this.arcLayer.selectAll("*").remove();
 
     if (!selectedCountryId || !records || !Array.isArray(records)) {
-      console.log(`Selected Country: ${selectedCountryId || 'None'}`);
-      console.log(`Selected Year: ${currentYear}`);
-      console.log(`Number of interstate conflicts found after filtering: 0`);
       return;
     }
 
     const normSelectedId = normalizeCountryId(selectedCountryId);
     const targetYear = Number(currentYear);
-    const countryName = this.countryIdToName.get(normSelectedId) || normSelectedId;
 
     // Strict 3-Way Filter
     const interstateConflicts = records.filter(record => {
@@ -274,10 +277,6 @@ export class MapViewer {
       return isYearMatch && isInterstate && isCountryMatch;
     });
 
-    console.log(`Selected Country: ${countryName} (${normSelectedId})`);
-    console.log(`Selected Year: ${targetYear}`);
-    console.log(`Number of interstate conflicts found after filtering: ${interstateConflicts.length}`);
-
     if (interstateConflicts.length === 0) {
       return;
     }
@@ -285,11 +284,6 @@ export class MapViewer {
     const drawnPairs = new Set();
 
     interstateConflicts.forEach(record => {
-      console.log(`Year: ${record.year}`);
-      console.log(`Type of Conflict: ${record.typeOfConflict}`);
-      console.log(`Side A: ${record.sideA}`);
-      console.log(`Side B: ${record.sideB}`);
-
       const opponentIds = record.matchedCountryIds
         .map(cid => normalizeCountryId(cid))
         .filter(cid => cid !== normSelectedId);
