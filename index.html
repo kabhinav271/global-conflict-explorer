@@ -24,7 +24,7 @@
       
       <!-- Video Layer (Scrubbed via JS based on scroll progress) -->
       <video class="cinematic-intro-video" id="cinematic-intro-video" muted playsinline preload="auto">
-        <source src="assets/Illustrated_bomb_moves_downward_1080p_202608140902.mp4" type="video/mp4">
+        <source src="assets/ezgif-2a890e1f356dc768.mp4" type="video/mp4">
       </video>
 
       <!-- Gradient Overlay for Legibility -->
@@ -60,7 +60,153 @@
     </div>
   </section>
 
-  <!-- 03 — INTRO TITLE CARD (GLOBAL CONFLICT EXPLORER) -->
+  <!-- CHAPTER 02 — STICKY STORYTELLING SCENE (Figma Node 13:330 & 22:524) -->
+  <div class="narrative-story-scroll" id="narrative-story-scroll">
+    <div class="narrative-story-sticky">
+      
+      <!-- STICKY BACKGROUND TEXT LAYER (Figma Node 13:330) -->
+      <div class="narrative-story-text" id="narrative-story-text">
+        <div class="figma-container-13-412">
+          <h2 class="figma-heading-13-332">
+            <span class="figma-highlight-red">1,000</span> deaths can mean very different things
+          </h2>
+          
+          <div class="figma-intro-group-13-411">
+            <p class="figma-intro-line1">Imagine two countries recording the same number of battle deaths.</p>
+            <p class="figma-intro-line2">The number is identical.</p>
+            <p class="figma-intro-line3">But the population experiencing that loss may be completely different.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOREGROUND SCROLL-DRIVEN CARD LAYER (Figma Node 22:524 Exact PNG Graphic) -->
+      <div class="narrative-card-layer" id="narrative-card-layer">
+        <div class="figma-frame-73-container">
+          <img src="assets/node_22_524.png" class="cards-frame-png" alt="Country A and Country B comparative visual scale cards">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CHAPTER 03 — FULL-SCREEN NARRATIVE SCENE: SCALE OF LOSS (Figma Node 26:526 Exact Graphic PNG Asset) -->
+  <section class="narrative-chapter narrative-chapter-loss" id="narrative-chapter-loss">
+    <div class="loss-container">
+      <img src="assets/node_26_526.png" class="loss-graphic-img" alt="The number of deaths is identical. The scale of loss isn't">
+    </div>
+  </section>
+
+  <!-- CHAPTER 04 — FULL-SCREEN NARRATIVE SCENE: MAKE IT PERSONAL (Figma Node 14:498 Exact Graphic PNG Asset) -->
+  <section class="narrative-chapter narrative-chapter-personal" id="narrative-chapter-personal">
+    <div class="personal-container">
+      <img src="assets/node_14_498.png" class="personal-graphic-img" alt="Now lets make it personal — What was the risk of dying in conflict where you lived?">
+    </div>
+  </section>
+
+  <!-- CHAPTER 05 — CALCULATOR 01: WHAT WAS THE RISK OF DYING IN CONFLICT WHERE YOU LIVED? -->
+  <section class="narrative-chapter narrative-calculator-01" id="narrative-calculator-01">
+    <!-- Rendered dynamically by Calculator01.js -->
+  </section>
+
+  <!-- CHAPTERS 06 & 07 — CONTINUOUS BLOOD FLOW TRANSITION SCENE -->
+  <div class="narrative-lifetime-scene" id="narrative-lifetime-scene">
+    
+    <!-- Shared Continuous Blood Flow SVG Layer -->
+    <svg class="blood-flow-svg" id="blood-flow-svg" aria-hidden="true">
+      <path class="blood-flow-path" id="blood-flow-path" fill="#8E0A0A" stroke="none" />
+      <path class="blood-secondary-path" id="blood-secondary-path" fill="none" stroke="#8E0A0A" stroke-width="1.2" opacity="0.5" />
+    </svg>
+
+    <!-- CHAPTER 06 — FULL-SCREEN NARRATIVE SCENE: ENTIRE LIFETIME INTRO (Figma Node 16:517) -->
+    <section class="narrative-chapter narrative-chapter-moment" id="narrative-chapter-moment">
+      <div class="moment-container">
+        <p class="moment-subhead">But one year is only one moment.</p>
+        <h2 class="moment-headline">What if we look at an entire lifetime<span class="lifetime-question-mark" id="lifetime-question-mark">?</span></h2>
+      </div>
+    </section>
+
+    <!-- CHAPTER 07 — FULL-SCREEN NARRATIVE SCENE: LIFETIME RISK QUESTION (Figma Node 32:108) -->
+    <section class="narrative-chapter narrative-chapter-lifetime-question" id="narrative-chapter-lifetime-question">
+      <div class="lifetime-question-container">
+        <h2 class="lifetime-question-headline">What was <span class="lifetime-target-letter" id="lifetime-target-letter">t</span>he conflict risk during your lifetime?</h2>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- CHAPTER 08 — CALCULATOR 02: LIFETIME CONFLICT EXPOSURE CALCULATOR -->
+  <section class="narrative-chapter narrative-calculator-02" id="narrative-calculator-02">
+    <!-- Rendered dynamically by Calculator02.js -->
+  </section>
+
+  <!-- CHAPTER 09 — FULL-SCREEN NARRATIVE SCENE: HUMAN COST (Figma Node 42:213) -->
+  <section class="narrative-chapter narrative-chapter-human-cost" id="narrative-chapter-human-cost">
+    <!-- Upper-Right Red Halftone Ruin Illustration (Exact Figma Image 14 SVG - shelter.svg) -->
+    <img src="assets/shelter.svg" class="human-cost-illustration" alt="Destroyed buildings and fleeing family illustration">
+
+    <!-- Centered Typography Group -->
+    <div class="human-cost-content">
+      <p class="human-cost-subhead">But living through conflict doesn't tell us how deadly it was.</p>
+      <h2 class="human-cost-headline">
+        A country can spend years in<br>
+        conflict without experiencing the<br>
+        same level of loss as another.
+      </h2>
+    </div>
+  </section>
+
+  <!-- NEW CHAPTER 10 — FULL-SCREEN NARRATIVE SCENE: MORE TIME IN CONFLICT QUESTION (Figma Node 42:234) -->
+  <section class="narrative-chapter narrative-chapter-more-time" id="narrative-chapter-more-time">
+    <!-- Bottom-Left Army Illustration (Exact Figma Asset - Army.svg) -->
+    <img src="assets/Army.svg" class="more-time-illustration" alt="Army march halftone illustration">
+
+    <!-- Centered Single Statement Headline -->
+    <div class="more-time-content">
+      <h2 class="more-time-headline">
+        So, does more time in conflict<br>
+        mean more people die?
+      </h2>
+    </div>
+  </section>
+  <!-- CHAPTER 11 — SCATTER PLOT: YEARS IN CONFLICT VS BATTLE DEATHS -->
+  <section class="narrative-chapter narrative-scatterplot-section" id="narrative-scatterplot-section">
+    <div class="narrative-scatterplot-container" id="scatterplot-container">
+      <!-- Rendered dynamically by ScatterPlot.js -->
+    </div>
+  </section>
+
+<!-- FINAL CONCLUSION -->
+<section class="narrative-final-conclusion" id="narrative-final-conclusion">
+
+  <div class="final-conclusion-content">
+
+    <span class="final-conclusion-eyebrow">
+      WHAT THE DATA TELLS US
+    </span>
+
+    <h2 class="final-conclusion-title">
+      More time in conflict<br>
+      does not necessarily mean<br>
+      more people die.
+    </h2>
+
+    <p class="final-conclusion-description">
+      Duration tells us how long a conflict lasted.
+      It does not tell us how deadly it was.
+    </p>
+
+    <div class="final-conclusion-divider"></div>
+
+    <p class="final-conclusion-closing">
+      The human cost of conflict<br>
+      cannot be measured by time alone.
+    </p>
+
+  </div>
+
+</section>
+
+  <!-- 04 — TITLE CARD (GLOBAL CONFLICT EXPLORER) -->
   <section class="narrative-chapter cinematic-title-section" id="cinematic-title-section">
     <div class="cinematic-title-block">
       <h1 class="cinematic-title-main">GLOBAL CONFLICT EXPLORER</h1>
@@ -108,7 +254,7 @@
     </div>
   </header>
 
-  <!-- Main Container (CHAPTER 01 — THE EXPLORER DASHBOARD) -->
+  <!-- Main Container (EXPLORER DASHBOARD) -->
   <main class="app-layout">
     
     <!-- Map and Timeline Workspace (Left Column ~75%) -->
@@ -270,152 +416,6 @@
 
     </aside>
   </main>
-
-  <!-- CHAPTER 02 — STICKY STORYTELLING SCENE (Figma Node 13:330 & 22:524) -->
-  <div class="narrative-story-scroll" id="narrative-story-scroll">
-    <div class="narrative-story-sticky">
-      
-      <!-- STICKY BACKGROUND TEXT LAYER (Figma Node 13:330) -->
-      <div class="narrative-story-text" id="narrative-story-text">
-        <div class="figma-container-13-412">
-          <h2 class="figma-heading-13-332">
-            <span class="figma-highlight-red">1,000</span> deaths can mean very different things
-          </h2>
-          
-          <div class="figma-intro-group-13-411">
-            <p class="figma-intro-line1">Imagine two countries recording the same number of battle deaths.</p>
-            <p class="figma-intro-line2">The number is identical.</p>
-            <p class="figma-intro-line3">But the population experiencing that loss may be completely different.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- FOREGROUND SCROLL-DRIVEN CARD LAYER (Figma Node 22:524 Exact PNG Graphic) -->
-      <div class="narrative-card-layer" id="narrative-card-layer">
-        <div class="figma-frame-73-container">
-          <img src="assets/node_22_524.png" class="cards-frame-png" alt="Country A and Country B comparative visual scale cards">
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- CHAPTER 03 — FULL-SCREEN NARRATIVE SCENE: SCALE OF LOSS (Figma Node 26:526 Exact Graphic PNG Asset) -->
-  <section class="narrative-chapter narrative-chapter-loss" id="narrative-chapter-loss">
-    <div class="loss-container">
-      <img src="assets/node_26_526.png" class="loss-graphic-img" alt="The number of deaths is identical. The scale of loss isn't">
-    </div>
-  </section>
-
-  <!-- CHAPTER 04 — FULL-SCREEN NARRATIVE SCENE: MAKE IT PERSONAL (Figma Node 14:498 Exact Graphic PNG Asset) -->
-  <section class="narrative-chapter narrative-chapter-personal" id="narrative-chapter-personal">
-    <div class="personal-container">
-      <img src="assets/node_14_498.png" class="personal-graphic-img" alt="Now lets make it personal — What was the risk of dying in conflict where you lived?">
-    </div>
-  </section>
-
-  <!-- CHAPTER 05 — CALCULATOR 01: WHAT WAS THE RISK OF DYING IN CONFLICT WHERE YOU LIVED? -->
-  <section class="narrative-chapter narrative-calculator-01" id="narrative-calculator-01">
-    <!-- Rendered dynamically by Calculator01.js -->
-  </section>
-
-  <!-- CHAPTERS 06 & 07 — CONTINUOUS BLOOD FLOW TRANSITION SCENE -->
-  <div class="narrative-lifetime-scene" id="narrative-lifetime-scene">
-    
-    <!-- Shared Continuous Blood Flow SVG Layer -->
-    <svg class="blood-flow-svg" id="blood-flow-svg" aria-hidden="true">
-      <path class="blood-flow-path" id="blood-flow-path" fill="#8E0A0A" stroke="none" />
-      <path class="blood-secondary-path" id="blood-secondary-path" fill="none" stroke="#8E0A0A" stroke-width="1.2" opacity="0.5" />
-    </svg>
-
-    <!-- CHAPTER 06 — FULL-SCREEN NARRATIVE SCENE: ENTIRE LIFETIME INTRO (Figma Node 16:517) -->
-    <section class="narrative-chapter narrative-chapter-moment" id="narrative-chapter-moment">
-      <div class="moment-container">
-        <p class="moment-subhead">But one year is only one moment.</p>
-        <h2 class="moment-headline">What if we look at an entire lifetime<span class="lifetime-question-mark" id="lifetime-question-mark">?</span></h2>
-      </div>
-    </section>
-
-    <!-- CHAPTER 07 — FULL-SCREEN NARRATIVE SCENE: LIFETIME RISK QUESTION (Figma Node 32:108) -->
-    <section class="narrative-chapter narrative-chapter-lifetime-question" id="narrative-chapter-lifetime-question">
-      <div class="lifetime-question-container">
-        <h2 class="lifetime-question-headline">What was <span class="lifetime-target-letter" id="lifetime-target-letter">t</span>he conflict risk during your lifetime?</h2>
-      </div>
-    </section>
-
-  </div>
-
-  <!-- CHAPTER 08 — CALCULATOR 02: LIFETIME CONFLICT EXPOSURE CALCULATOR -->
-  <section class="narrative-chapter narrative-calculator-02" id="narrative-calculator-02">
-    <!-- Rendered dynamically by Calculator02.js -->
-  </section>
-
-  <!-- CHAPTER 09 — FULL-SCREEN NARRATIVE SCENE: HUMAN COST (Figma Node 42:213) -->
-  <section class="narrative-chapter narrative-chapter-human-cost" id="narrative-chapter-human-cost">
-    <!-- Upper-Right Red Halftone Ruin Illustration (Exact Figma Image 14 SVG - shelter.svg) -->
-    <img src="assets/shelter.svg" class="human-cost-illustration" alt="Destroyed buildings and fleeing family illustration">
-
-    <!-- Centered Typography Group -->
-    <div class="human-cost-content">
-      <p class="human-cost-subhead">But living through conflict doesn't tell us how deadly it was.</p>
-      <h2 class="human-cost-headline">
-        A country can spend years in<br>
-        conflict without experiencing the<br>
-        same level of loss as another.
-      </h2>
-    </div>
-  </section>
-
-  <!-- NEW CHAPTER 10 — FULL-SCREEN NARRATIVE SCENE: MORE TIME IN CONFLICT QUESTION (Figma Node 42:234) -->
-  <section class="narrative-chapter narrative-chapter-more-time" id="narrative-chapter-more-time">
-    <!-- Bottom-Left Army Illustration (Exact Figma Asset - Army.svg) -->
-    <img src="assets/Army.svg" class="more-time-illustration" alt="Army march halftone illustration">
-
-    <!-- Centered Single Statement Headline -->
-    <div class="more-time-content">
-      <h2 class="more-time-headline">
-        So, does more time in conflict<br>
-        mean more people die?
-      </h2>
-    </div>
-  </section>
-  <!-- CHAPTER 11 — SCATTER PLOT: YEARS IN CONFLICT VS BATTLE DEATHS -->
-  <section class="narrative-chapter narrative-scatterplot-section" id="narrative-scatterplot-section">
-    <div class="narrative-scatterplot-container" id="scatterplot-container">
-      <!-- Rendered dynamically by ScatterPlot.js -->
-    </div>
-  </section>
-
-<!-- FINAL CONCLUSION -->
-<section class="narrative-final-conclusion" id="narrative-final-conclusion">
-
-  <div class="final-conclusion-content">
-
-    <span class="final-conclusion-eyebrow">
-      WHAT THE DATA TELLS US
-    </span>
-
-    <h2 class="final-conclusion-title">
-      More time in conflict<br>
-      does not necessarily mean<br>
-      more people die.
-    </h2>
-
-    <p class="final-conclusion-description">
-      Duration tells us how long a conflict lasted.
-      It does not tell us how deadly it was.
-    </p>
-
-    <div class="final-conclusion-divider"></div>
-
-    <p class="final-conclusion-closing">
-      The human cost of conflict<br>
-      cannot be measured by time alone.
-    </p>
-
-  </div>
-
-</section>
 
 
 <script type="module" src="src/main.js"></script>

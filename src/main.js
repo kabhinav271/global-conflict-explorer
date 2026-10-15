@@ -485,8 +485,6 @@ function initNarrativeArrowNavigation() {
   const sections = [
     document.getElementById('cinematic-intro-scroll-track'),
     document.getElementById('cinematic-statement-section'),
-    document.getElementById('cinematic-title-section'),
-    document.querySelector('.app-layout'),
     document.getElementById('narrative-story-scroll'),
     document.getElementById('narrative-chapter-loss'),
     document.getElementById('narrative-chapter-personal'),
@@ -496,7 +494,9 @@ function initNarrativeArrowNavigation() {
     document.getElementById('narrative-chapter-human-cost'),
     document.getElementById('narrative-chapter-more-time'),
     document.getElementById('narrative-scatterplot-section'),
-    document.getElementById('narrative-final-conclusion')
+    document.getElementById('narrative-final-conclusion'),
+    document.getElementById('cinematic-title-section'),
+    document.querySelector('.app-layout')
   ].filter(Boolean);
 
   function getCurrentSectionIndex() {

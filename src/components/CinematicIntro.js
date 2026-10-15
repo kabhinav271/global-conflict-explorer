@@ -41,7 +41,7 @@ export class CinematicIntro {
     ];
 
     this.factElements = [];
-    this.videoDuration = 2.334;
+    this.videoDuration = 2.32;
 
     // Smooth Lerp State
     this.targetProgress = 0;
